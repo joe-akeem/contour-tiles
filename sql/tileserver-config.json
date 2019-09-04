@@ -1,0 +1,19 @@
+{
+  "data" : {
+    "europe": {
+      "mbtiles": "europe.mbtiles"
+    },
+    "contour": {
+      "mbtiles": "contour.mbtiles"
+    }
+  },
+  "styles": {
+    "europe": {
+      "style": "basic-style.json",
+      "tilejson": {
+        "type": "overlay",
+        "bounds": [8.44806, 47.32023, 8.62537, 47.43468]
+      }
+    }
+  }
+}

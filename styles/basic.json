@@ -1,0 +1,289 @@
+{
+  "version": 8,
+  "sources": {
+    "europe": {
+      "type": "vector",
+      "url": "mbtiles://europe.mbtiles"
+    },
+    "contour": {
+      "type": "vector",
+      "url": "mbtiles://contour.mbtiles"
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "rgba(248, 244, 240, 1)"
+      }
+    },
+    {
+      "id": "landuse_overlay_national_park",
+      "type": "fill",
+      "source": "europe",
+      "source-layer": "landuse_overlay",
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "national_park"
+        ]
+      ],
+      "paint": {
+        "fill-color": "rgba(216, 232, 200, 1)",
+        "fill-opacity": 0.75
+      },
+      "layout": {
+        "visibility": "visible"
+      }
+    },
+    {
+      "id": "landuse_park",
+      "type": "fill",
+      "source": "europe",
+      "source-layer": "landuse",
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "park"
+        ]
+      ],
+      "paint": {
+        "fill-color": "rgba(216, 232, 200, 1)"
+      }
+    },
+    {
+      "id": "landuse_cemetery",
+      "type": "fill",
+      "source": "europe",
+      "source-layer": "landuse",
+      "layout": {
+        "visibility": "visible"
+      },
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "cemetery"
+        ]
+      ],
+      "paint": {
+        "fill-color": "rgba(224, 228, 221, 1)"
+      }
+    },
+    {
+      "id": "landuse_hospital",
+      "type": "fill",
+      "source": "europe",
+      "source-layer": "landuse",
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "hospital"
+        ]
+      ],
+      "paint": {
+        "fill-color": "rgba(255, 221, 238, 1)"
+      }
+    },
+    {
+      "id": "landuse_school",
+      "type": "fill",
+      "source": "europe",
+      "source-layer": "landuse",
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "school"
+        ]
+      ],
+      "paint": {
+        "fill-color": "rgba(240, 232, 248, 1)"
+      }
+    },
+    {
+      "id": "landuse_rock",
+      "type": "fill",
+      "source": "europe",
+      "source-layer": "landuse",
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "rock"
+        ]
+      ],
+      "paint": {
+        "fill-color": "rgba(152, 149, 149, 1)"
+      }
+    },
+    {
+      "id": "landuse_glacier",
+      "type": "fill",
+      "source": "europe",
+      "source-layer": "landuse",
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "glacier"
+        ]
+      ],
+      "paint": {
+        "fill-color": "rgba(228, 243, 249, 1)"
+      }
+    },
+    {
+      "id": "landuse_wood",
+      "type": "fill",
+      "source": "europe",
+      "source-layer": "landuse",
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "wood"
+        ]
+      ],
+      "paint": {
+        "fill-color": "rgba(195, 217, 173, 1)"
+      }
+    },
+    {
+      "id": "contour_normal20",
+      "type": "line",
+      "source": "contour",
+      "source-layer": "contour",
+      "paint": {
+        "line-color": "rgba(118, 94, 29, 1)",
+        "line-width": 0.1
+      },
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "normal"
+        ],
+        [
+          "==",
+          "distance",
+          "20m"
+        ]
+      ],
+      "minzoom": 13
+    },
+    {
+      "id": "contour_normal100",
+      "type": "line",
+      "source": "contour",
+      "source-layer": "contour",
+      "layout": {
+        "visibility": "visible"
+      },
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "normal"
+        ],
+        [
+          "==",
+          "distance",
+          "100m"
+        ]
+      ],
+      "paint": {
+        "line-color": "rgba(118, 94, 29, 1)",
+        "line-width": {
+          "stops": [
+            [
+              10,
+              0.1
+            ],
+            [
+              13,
+              0.3
+            ]
+          ]
+        }
+      },
+      "minzoom": 10
+    },
+    {
+      "id": "contour_glacier20",
+      "type": "line",
+      "source": "contour",
+      "source-layer": "contour",
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "glacier"
+        ],
+        [
+          "==",
+          "distance",
+          "20m"
+        ]
+      ],
+      "paint": {
+        "line-color": "rgba(60, 132, 170, 1)",
+        "line-width": 0.1
+      },
+      "minzoom": 1
+    },
+    {
+      "id": "contour_glacier100",
+      "type": "line",
+      "source": "contour",
+      "source-layer": "contour",
+      "filter": [
+        "all",
+        [
+          "==",
+          "distance",
+          "100m"
+        ],
+        [
+          "==",
+          "type",
+          "glacier"
+        ]
+      ],
+      "minzoom": 10,
+      "paint": {
+        "line-width": {
+          "stops": [
+            [
+              10,
+              0.1
+            ],
+            [
+              13,
+              0.3
+            ]
+          ]
+        },
+        "line-color": "rgba(60, 132, 170, 1)"
+      }
+    }
+  ],
+  "id": "1ln66rsxs",
+  "name": "Europe",
+  "owner": "singletrail-map.eu"
+}
