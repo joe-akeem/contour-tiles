@@ -8,6 +8,14 @@
     "contour": {
       "type": "vector",
       "url": "mbtiles://contour.mbtiles"
+    },
+    "hillshade": {
+      "type": "raster",
+      "url": "mbtiles://hillshade.mbtiles"
+    },
+    "slope": {
+      "type": "raster",
+      "url": "mbtiles://slope.mbtiles"
     }
   },
   "layers": [
@@ -15,7 +23,8 @@
       "id": "background",
       "type": "background",
       "paint": {
-        "background-color": "rgba(248, 244, 240, 1)"
+        "background-color": "rgba(248, 244, 240, 1)",
+        "background-opacity": 1
       }
     },
     {
@@ -124,7 +133,7 @@
         ]
       ],
       "paint": {
-        "fill-color": "rgba(152, 149, 149, 1)"
+        "fill-color": "rgba(183, 174, 174, 1)"
       }
     },
     {
@@ -159,6 +168,140 @@
       ],
       "paint": {
         "fill-color": "rgba(195, 217, 173, 1)"
+      }
+    },
+    {
+      "id": "waterway",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "waterway",
+      "layout": {
+        "line-cap": "round"
+      },
+      "filter": [
+        "all",
+        [
+          "!=",
+          "class",
+          "river"
+        ],
+        [
+          "!=",
+          "class",
+          "stream"
+        ],
+        [
+          "!=",
+          "class",
+          "canal"
+        ]
+      ],
+      "paint": {
+        "line-color": "rgba(160, 200, 240, 1)",
+        "line-width": {
+          "stops": [
+            [
+              13,
+              0.5
+            ],
+            [
+              20,
+              2
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "waterway_river",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "waterway",
+      "paint": {
+        "line-color": "rgba(160, 200, 240, 1)",
+        "line-width": {
+          "stops": [
+            [
+              10,
+              0.5
+            ],
+            [
+              20,
+              6
+            ]
+          ]
+        }
+      },
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "river"
+        ]
+      ],
+      "layout": {
+        "line-cap": "round"
+      }
+    },
+    {
+      "id": "waterway_stream_canal",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "waterway",
+      "filter": [
+        "all",
+        [
+          "in",
+          "class",
+          "stream",
+          " canal"
+        ]
+      ],
+      "paint": {
+        "line-color": "rgba(160, 200, 240, 1)",
+        "line-width": {
+          "stops": [
+            [
+              13,
+              0.5
+            ],
+            [
+              20,
+              6
+            ]
+          ]
+        },
+        "line-opacity": 1
+      }
+    },
+    {
+      "id": "water",
+      "type": "fill",
+      "source": "europe",
+      "source-layer": "water",
+      "paint": {
+        "fill-color": "rgba(160, 200, 240, 1)"
+      },
+      "layout": {}
+    },
+    {
+      "id": "hillshade",
+      "type": "raster",
+      "source": "hillshade",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "raster-opacity": 0.2
+      }
+    },
+    {
+      "id": "slope",
+      "type": "raster",
+      "source": "slope",
+      "paint": {
+        "raster-opacity": 0.1
       }
     },
     {
@@ -281,9 +424,67 @@
         },
         "line-color": "rgba(60, 132, 170, 1)"
       }
+    },
+    {
+      "id": "contour_normal_label",
+      "type": "symbol",
+      "source": "contour",
+      "source-layer": "contour",
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "normal"
+        ],
+        [
+          "==",
+          "distance",
+          "100m"
+        ]
+      ],
+      "layout": {
+        "text-field": "{elev}",
+        "symbol-placement": "line",
+        "symbol-spacing": 500,
+        "text-size": 10
+      },
+      "paint": {
+        "text-color": "rgba(118, 94, 29, 1)"
+      },
+      "minzoom": 11
+    },
+    {
+      "id": "contour_glacier_label",
+      "type": "symbol",
+      "source": "contour",
+      "source-layer": "contour",
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "glacier"
+        ],
+        [
+          "==",
+          "distance",
+          "100m"
+        ]
+      ],
+      "layout": {
+        "symbol-placement": "line",
+        "text-field": "{elev}",
+        "text-size": 10
+      },
+      "minzoom": 11,
+      "paint": {
+        "text-color": "rgba(60, 132, 170, 1)"
+      }
     }
   ],
   "id": "1ln66rsxs",
   "name": "Europe",
-  "owner": "singletrail-map.eu"
+  "owner": "singletrail-map.eu",
+  "glyphs": "mapbox://fonts/mapbox/{fontstack}/{range}.pbf"
 }
