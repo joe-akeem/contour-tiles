@@ -30,6 +30,9 @@
     },
     "mountainbike": {
       "mbtiles": "mtb_scale.mbtiles"
+    },
+    "contour": {
+      "mbtiles": "contour.mbtiles"
     }
   }
 }
