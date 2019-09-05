@@ -286,6 +286,355 @@
       "layout": {}
     },
     {
+      "id": "building",
+      "type": "fill",
+      "source": "europe",
+      "source-layer": "building"
+    },
+    {
+      "id": "road_street_casing",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "street"
+        ],
+        [
+          "!in",
+          "class",
+          "(structure",
+          " bridge",
+          " tunnel)"
+        ]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": {
+          "stops": [
+            [
+              13,
+              2.3
+            ],
+            [
+              14,
+              3.5
+            ],
+            [
+              20,
+              15
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "road_street",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "street"
+        ],
+        [
+          "!in",
+          "class",
+          "structure",
+          " bridge",
+          " tunnel"
+        ]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "rgba(255, 255, 255, 1)",
+        "line-width": {
+          "stops": [
+            [
+              13,
+              1.5
+            ],
+            [
+              14,
+              2.7
+            ],
+            [
+              20,
+              11.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "road_motorway_link_casing",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "motorway_link"
+        ],
+        [
+          "!in",
+          "class",
+          "structure",
+          " bridge",
+          " tunnel"
+        ]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-width": {
+          "stops": [
+            [
+              5,
+              0.4
+            ],
+            [
+              6,
+              0.6
+            ],
+            [
+              7,
+              1.5
+            ],
+            [
+              10,
+              2.4
+            ],
+            [
+              14,
+              4
+            ],
+            [
+              15,
+              6
+            ],
+            [
+              16,
+              8
+            ],
+            [
+              17,
+              10
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "road_motorway_casing",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "motorway"
+        ],
+        [
+          "!in",
+          "class",
+          "structure",
+          " bridge",
+          " tunnel"
+        ]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-width": {
+          "stops": [
+            [
+              5,
+              0.4
+            ],
+            [
+              6,
+              0.6
+            ],
+            [
+              7,
+              1.5
+            ],
+            [
+              10,
+              2.4
+            ],
+            [
+              14,
+              4
+            ],
+            [
+              15,
+              6
+            ],
+            [
+              16,
+              8
+            ],
+            [
+              17,
+              10
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "road_motorway_link",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "motorway_link"
+        ],
+        [
+          "!in",
+          "class",
+          "structure",
+          " bridge",
+          " tunnel"
+        ]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": {
+          "stops": [
+            [
+              5,
+              0.2
+            ],
+            [
+              6,
+              0.3
+            ],
+            [
+              7,
+              1
+            ],
+            [
+              10,
+              1.8
+            ],
+            [
+              14,
+              2.8
+            ],
+            [
+              15,
+              4.8
+            ],
+            [
+              16,
+              6.8
+            ],
+            [
+              17,
+              8
+            ]
+          ]
+        },
+        "line-color": "rgba(235, 171, 86, 1)"
+      }
+    },
+    {
+      "id": "road_motorway",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "motorway"
+        ],
+        [
+          "!in",
+          "class",
+          "structure",
+          " bridge",
+          " tunnel"
+        ]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": {
+          "stops": [
+            [
+              5,
+              0.2
+            ],
+            [
+              6,
+              0.3
+            ],
+            [
+              7,
+              1
+            ],
+            [
+              10,
+              1.8
+            ],
+            [
+              14,
+              2.8
+            ],
+            [
+              15,
+              4.8
+            ],
+            [
+              16,
+              6.8
+            ],
+            [
+              17,
+              8
+            ]
+          ]
+        },
+        "line-color": "rgba(235, 171, 86, 1)"
+      }
+    },
+    {
       "id": "hillshade",
       "type": "raster",
       "source": "hillshade",
@@ -447,7 +796,11 @@
         "text-field": "{elev}",
         "symbol-placement": "line",
         "symbol-spacing": 500,
-        "text-size": 10
+        "text-size": 10,
+        "visibility": "visible",
+        "text-font": [
+          "Open Sans Italic"
+        ]
       },
       "paint": {
         "text-color": "rgba(118, 94, 29, 1)"
@@ -475,7 +828,11 @@
       "layout": {
         "symbol-placement": "line",
         "text-field": "{elev}",
-        "text-size": 10
+        "text-size": 10,
+        "visibility": "visible",
+        "text-font": [
+          "Open Sans Italic"
+        ]
       },
       "minzoom": 11,
       "paint": {
@@ -486,5 +843,5 @@
   "id": "1ln66rsxs",
   "name": "Europe",
   "owner": "singletrail-map.eu",
-  "glyphs": "mapbox://fonts/mapbox/{fontstack}/{range}.pbf"
+  "glyphs": "http://glfonts.lukasmartinelli.ch/fonts/{fontstack}/{range}.pbf"
 }
