@@ -29,7 +29,7 @@
       "mbtiles": "OSloOVERLAY_LR_Alps_16.mbtiles"
     },
     "mountainbike": {
-      "mbtiles": "mtb_scale.mbtiles"
+      "mbtiles": "mtb.mbtiles"
     },
     "contour": {
       "mbtiles": "contour.mbtiles"
