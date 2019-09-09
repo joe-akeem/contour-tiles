@@ -17,6 +17,7 @@
 # sys.path.insert(0, os.path.abspath('.'))
 import sphinx_bootstrap_theme
 import sphinx_rtd_theme
+import sphinx_fontawesome
 
 # -- Project information -----------------------------------------------------
 
@@ -42,6 +43,7 @@ release = u'1.0'
 extensions = [
     'sphinx.ext.todo',
     "sphinx_rtd_theme",
+    'sphinx_fontawesome',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
