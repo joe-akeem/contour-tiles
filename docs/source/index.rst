@@ -269,7 +269,7 @@ Possible ``track`` class ``type`` values::
    track:grade5
    track
 
-Possible service class type values::
+Possible ``service`` class ``type`` values::
 
    service:alley
    service:emergency_access
