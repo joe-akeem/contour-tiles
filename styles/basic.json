@@ -295,22 +295,17 @@
       "source-layer": "building"
     },
     {
-      "id": "road_secondary_tertiary_casing",
+      "id": "road_path_pedestrian",
       "type": "line",
       "source": "europe",
       "source-layer": "road",
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
       "filter": [
         "all",
         [
           "in",
           "class",
-          "secondary",
-          " tertiary"
+          "path",
+          " pedestrian"
         ],
         [
           "!in",
@@ -319,65 +314,59 @@
           " tunnel"
         ]
       ],
+      "layout": {
+        "visibility": "visible"
+      },
       "paint": {
         "line-width": {
           "stops": [
             [
-              13,
-              2
-            ],
-            [
-              14,
-              3
+              15,
+              0.2
             ],
             [
               20,
-              11
+              4
             ]
           ]
         }
       }
     },
     {
-      "id": "road_secondary_tertiary",
+      "id": "road_service_track",
       "type": "line",
       "source": "europe",
       "source-layer": "road",
-      "layout": {
-        "visibility": "visible",
-        "line-cap": "round",
-        "line-join": "round"
-      },
       "filter": [
         "all",
         [
           "in",
           "class",
-          "secondary",
-          "tertiary"
+          "service",
+          " track"
         ],
         [
           "!in",
           "structure",
           "bridge",
-          "tunnel"
+          " tunnel"
         ]
       ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "minzoom": 0,
       "paint": {
-        "line-color": "rgba(255, 255, 255, 1)",
         "line-width": {
           "stops": [
             [
-              13,
-              1.9
-            ],
-            [
-              14,
-              2.6
+              15,
+              0.3
             ],
             [
               20,
-              8.5
+              7.5
             ]
           ]
         }
@@ -471,6 +460,217 @@
       }
     },
     {
+      "id": "road_secondary_tertiary_casing",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "road",
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "filter": [
+        "all",
+        [
+          "in",
+          "class",
+          "secondary",
+          " tertiary"
+        ],
+        [
+          "!in",
+          "structure",
+          "bridge",
+          " tunnel"
+        ]
+      ],
+      "paint": {
+        "line-width": {
+          "stops": [
+            [
+              13,
+              2.3
+            ],
+            [
+              14,
+              3.5
+            ],
+            [
+              20,
+              13
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "road_secondary_tertiary",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "road",
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "filter": [
+        "all",
+        [
+          "in",
+          "class",
+          "secondary",
+          "tertiary"
+        ],
+        [
+          "!in",
+          "structure",
+          "bridge",
+          "tunnel"
+        ]
+      ],
+      "paint": {
+        "line-color": "rgba(255, 255, 255, 1)",
+        "line-width": {
+          "stops": [
+            [
+              13,
+              1.5
+            ],
+            [
+              14,
+              2.7
+            ],
+            [
+              20,
+              11.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "road_trunk_primary_casing",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "road",
+      "layout": {
+        "line-join": "round",
+        "line-cap": "round"
+      },
+      "filter": [
+        "all",
+        [
+          "in",
+          "class",
+          "trunk",
+          " primary"
+        ],
+        [
+          "!in",
+          "structure",
+          "bridge",
+          " tunnel"
+        ]
+      ],
+      "paint": {
+        "line-width": {
+          "stops": [
+            [
+              6,
+              0.5
+            ],
+            [
+              7,
+              1.3
+            ],
+            [
+              10,
+              2.2
+            ],
+            [
+              14,
+              3.2
+            ],
+            [
+              15,
+              5
+            ],
+            [
+              16,
+              7
+            ],
+            [
+              17,
+              8
+            ]
+          ]
+        }
+      },
+      "minzoom": 6
+    },
+    {
+      "id": "road_trunk_primary",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "road",
+      "layout": {
+        "line-join": "round",
+        "line-cap": "round",
+        "visibility": "visible"
+      },
+      "filter": [
+        "all",
+        [
+          "in",
+          "class",
+          "trunk",
+          " primary"
+        ],
+        [
+          "!in",
+          "structure",
+          "bridge",
+          " tunnel"
+        ]
+      ],
+      "paint": {
+        "line-width": {
+          "stops": [
+            [
+              6,
+              0.3
+            ],
+            [
+              7,
+              1.3
+            ],
+            [
+              10,
+              1.5
+            ],
+            [
+              14,
+              2.4
+            ],
+            [
+              15,
+              3.2
+            ],
+            [
+              16,
+              6.5
+            ],
+            [
+              17,
+              6
+            ]
+          ]
+        },
+        "line-color": "rgba(253, 242, 145, 1)"
+      },
+      "minzoom": 6
+    },
+    {
       "id": "road_motorway_link_casing",
       "type": "line",
       "source": "europe",
@@ -481,70 +681,6 @@
           "==",
           "class",
           "motorway_link"
-        ],
-        [
-          "!in",
-          "class",
-          "structure",
-          " bridge",
-          " tunnel"
-        ]
-      ],
-      "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-width": {
-          "stops": [
-            [
-              5,
-              0.4
-            ],
-            [
-              6,
-              0.6
-            ],
-            [
-              7,
-              1.5
-            ],
-            [
-              10,
-              2.4
-            ],
-            [
-              14,
-              4
-            ],
-            [
-              15,
-              6
-            ],
-            [
-              16,
-              8
-            ],
-            [
-              17,
-              10
-            ]
-          ]
-        }
-      }
-    },
-    {
-      "id": "road_motorway_casing",
-      "type": "line",
-      "source": "europe",
-      "source-layer": "road",
-      "filter": [
-        "all",
-        [
-          "==",
-          "class",
-          "motorway"
         ],
         [
           "!in",
@@ -660,6 +796,70 @@
           ]
         },
         "line-color": "rgba(235, 171, 86, 1)"
+      }
+    },
+    {
+      "id": "road_motorway_casing",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "motorway"
+        ],
+        [
+          "!in",
+          "class",
+          "structure",
+          " bridge",
+          " tunnel"
+        ]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-width": {
+          "stops": [
+            [
+              5,
+              0.4
+            ],
+            [
+              6,
+              0.6
+            ],
+            [
+              7,
+              1.5
+            ],
+            [
+              10,
+              2.4
+            ],
+            [
+              14,
+              4
+            ],
+            [
+              15,
+              6
+            ],
+            [
+              16,
+              8
+            ],
+            [
+              17,
+              10
+            ]
+          ]
+        }
       }
     },
     {
