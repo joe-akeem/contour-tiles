@@ -154,11 +154,40 @@ The main field used for styling the landuse_overlay layer is ``class``.
 
 water
 -----
+Type: Polygon
+
+This layer includes all types of water bodies: oceans, rivers, lakes, ponds, streams and more.
+
+Each zoom level includes a set of water bodies that has been filtered and simplified according to scale. The tileset
+shows only oceans, seas, and large lakes at the lowest zoom levels, while smaller and smaller lakes and ponds appear as you zoom in.
 
 .. _waterway:
 
 waterway
 --------
+Type: Linestring
+
+The waterway layer contains classes for rivers, streams, canals, etc represented as lines. These classes can represent
+a wide variety of possible widths. Since larger rivers and canals are usually also represented by polygons in the
+:ref:`water` layer, make your line styling biased toward the smaller end of the scales. It should also be under the :ref:`water` layer.
+
++------------------------+----------------------------------------------------------------------+
+| **Value**              | **Description**                                                      |
++------------------------+----------------------------------------------------------------------+
+| river                  |                                                                      |
++------------------------+----------------------------------------------------------------------+
+| canal                  |                                                                      |
++------------------------+----------------------------------------------------------------------+
+| stream                 |                                                                      |
++------------------------+----------------------------------------------------------------------+
+| drain                  |                                                                      |
++------------------------+----------------------------------------------------------------------+
+| ditch                  |                                                                      |
++------------------------+----------------------------------------------------------------------+
+
+class - *text*
+^^^^^^^^^^^^^^
+The waterway layer has two fields for styling - ``class`` and ``type`` - each with similar values.
 
 .. _road:
 
@@ -327,6 +356,7 @@ Possible ``aerialway`` class type values:
 +------------------------+----------------------------------------------------------------------+
 | aerialway              | Other or unspecified type of aerialway                               |
 +------------------------+----------------------------------------------------------------------+
+
 
 Indices and tables
 ==================
