@@ -2,8 +2,8 @@
   "options": {
     "paths": {
       "root": ".",
-      "styles": "styles",
-      "mbtiles": "data/mbtiles"
+      "styles": "../styles",
+      "mbtiles": "../data/mbtiles"
     }
   },
   "styles": {
