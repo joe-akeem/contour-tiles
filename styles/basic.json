@@ -25,6 +25,9 @@
       "paint": {
         "background-color": "rgba(248, 244, 240, 1)",
         "background-opacity": 1
+      },
+      "layout": {
+        "visibility": "visible"
       }
     },
     {
@@ -290,6 +293,95 @@
       "type": "fill",
       "source": "europe",
       "source-layer": "building"
+    },
+    {
+      "id": "road_secondary_tertiary_casing",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "road",
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "filter": [
+        "all",
+        [
+          "in",
+          "class",
+          "secondary",
+          " tertiary"
+        ],
+        [
+          "!in",
+          "structure",
+          "bridge",
+          " tunnel"
+        ]
+      ],
+      "paint": {
+        "line-width": {
+          "stops": [
+            [
+              13,
+              2
+            ],
+            [
+              14,
+              3
+            ],
+            [
+              20,
+              11
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "road_secondary_tertiary",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "road",
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "filter": [
+        "all",
+        [
+          "in",
+          "class",
+          "secondary",
+          "tertiary"
+        ],
+        [
+          "!in",
+          "structure",
+          "bridge",
+          "tunnel"
+        ]
+      ],
+      "paint": {
+        "line-color": "rgba(255, 255, 255, 1)",
+        "line-width": {
+          "stops": [
+            [
+              13,
+              1.9
+            ],
+            [
+              14,
+              2.6
+            ],
+            [
+              20,
+              8.5
+            ]
+          ]
+        }
+      }
     },
     {
       "id": "road_street_casing",
