@@ -62,7 +62,7 @@ data/geojson/landuse_overlay.geojson: data/geojson
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 5 },/g' data/geojson/landuse_overlay.geojson
 
 data/geojson/admin.geojson: data/geojson
-	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 admin.geojson "PG:host=localhost dbname=gis user=osm" -sql @admin.sql
+	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/admin.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/admin.sql
 
 data/geojson/building.geojson: data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/building.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/building.sql
