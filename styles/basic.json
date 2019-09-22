@@ -928,6 +928,159 @@
       }
     },
     {
+      "id": "road_major_rail_casing",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "major_rail"
+        ],
+        [
+          "!in",
+          "structure",
+          "tunnel",
+          "bridge"
+        ]
+      ],
+      "paint": {
+        "line-width": {
+          "stops": [
+            [
+              10,
+              1
+            ],
+            [
+              12,
+              1
+            ],
+            [
+              14,
+              4.2
+            ]
+          ]
+        }
+      },
+      "layout": {
+        "visibility": "visible"
+      },
+      "minzoom": 10
+    },
+    {
+      "id": "road_major_rail",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "major_rail"
+        ],
+        [
+          "!in",
+          "structure",
+          "tunnel",
+          "bridge"
+        ]
+      ],
+      "paint": {
+        "line-width": {
+          "stops": [
+            [
+              10,
+              0.4
+            ],
+            [
+              12,
+              0.6
+            ],
+            [
+              14,
+              3.5
+            ]
+          ]
+        },
+        "line-color": "rgba(255, 255, 255, 1)"
+      },
+      "layout": {
+        "visibility": "visible"
+      },
+      "minzoom": 10
+    },
+    {
+      "id": "road_major_rail_hatching",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "major_rail"
+        ],
+        [
+          "!in",
+          "structure",
+          "tunnel",
+          "bridge"
+        ]
+      ],
+      "paint": {
+        "line-color": "rgba(0, 0, 0, 1)",
+        "line-width": {
+          "stops": [
+            [
+              10,
+              0.4
+            ],
+            [
+              12,
+              0.6
+            ],
+            [
+              14,
+              4
+            ]
+          ]
+        },
+        "line-dasharray": {
+          "stops": [
+            [
+              10,
+              [
+                4,
+                4
+              ]
+            ],
+            [
+              12,
+              [
+                4,
+                4
+              ]
+            ],
+            [
+              14,
+              [
+                4,
+                4
+              ]
+            ]
+          ]
+        }
+      },
+      "layout": {
+        "visibility": "visible"
+      },
+      "minzoom": 10
+    },
+    {
       "id": "bridge_path_pedestrian",
       "type": "line",
       "source": "europe",
