@@ -50,44 +50,50 @@ data/mbtiles/slope.mbtiles: data/mbtiles data/tif/slope.tif
 #	Building geojson
 # ----------------------------------------------------------------------------------------------------------------------
 
-data/geojson:
-	mkdir data/geojson
-
-data/geojson/landuse.geojson: data/geojson sql/landuse.sql
+data/geojson/landuse.geojson: sql/landuse.sql
+	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/landuse.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/landuse.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 5 },/g' data/geojson/landuse.geojson
 
-data/geojson/landuse_overlay.geojson: data/geojson sql/landuse_overlay.sql
+data/geojson/landuse_overlay.geojson: sql/landuse_overlay.sql
+	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/landuse_overlay.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/landuse_overlay.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 5 },/g' data/geojson/landuse_overlay.geojson
 
-data/geojson/admin.geojson: data/geojson sql/admin.sql
+data/geojson/admin.geojson: sql/admin.sql
+	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/admin.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/admin.sql
 
-data/geojson/building.geojson: data/geojson sql/building.sql
+data/geojson/building.geojson: sql/building.sql
+	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/building.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/building.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 13 },/g' data/geojson/building.geojson
 
-data/geojson/road.geojson: data/geojson data/geojson/minor_road.geojson sql/major_road.sql
+data/geojson/road.geojson: data/geojson/minor_road.geojson sql/major_road.sql
+	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/road.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/major_road.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 5 },/g' data/geojson/road.geojson
 	ogr2ogr -f GeoJSON -append data/geojson/road.geojson data/geojson/minor_road.geojson
 
-data/geojson/minor_road.geojson: data/geojson sql/minor_road.sql
+data/geojson/minor_road.geojson: sql/minor_road.sql
+	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/minor_road.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/minor_road.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 10 },/g' data/geojson/minor_road.geojson
 
-data/geojson/waterway.geojson: data/geojson data/geojson/waterway_canal_stream.geojson data/geojson/waterway_ditch_drain.geojson sql/waterway_river.sql
+data/geojson/waterway.geojson: data/geojson/waterway_canal_stream.geojson data/geojson/waterway_ditch_drain.geojson sql/waterway_river.sql
+	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/waterway.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/waterway_river.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 7 },/g' data/geojson/waterway.geojson
 	ogr2ogr -f GeoJSON -append data/geojson/waterway.geojson data/geojson/waterway_canal_stream.geojson
 	ogr2ogr -f GeoJSON -append data/geojson/waterway.geojson data/geojson/waterway_ditch_drain.geojson
 
-data/geojson/waterway_canal_stream.geojson: data/geojson sql/waterway_canal_stream.sql
+data/geojson/waterway_canal_stream.geojson: sql/waterway_canal_stream.sql
+	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/waterway_canal_stream.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/waterway_canal_stream.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 10 },/g' data/geojson/waterway_canal_stream.geojson
 
-data/geojson/waterway_ditch_drain.geojson: data/geojson sql/waterway_ditch_drain.sql
+data/geojson/waterway_ditch_drain.geojson: sql/waterway_ditch_drain.sql
+	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/waterway_ditch_drain.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/waterway_ditch_drain.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 15 },/g' data/geojson/waterway_ditch_drain.geojson
 
@@ -97,19 +103,22 @@ data/geojson/water.geojson: data/geojson/water_medium.geojson data/geojson/water
 	ogr2ogr -f GeoJSON -append data/geojson/water.geojson data/geojson/water_medium.geojson
 	ogr2ogr -f GeoJSON -append data/geojson/water.geojson data/geojson/water_small.geojson
 
-data/geojson/water_medium.geojson: data/geojson sql/water_medium.sql
+data/geojson/water_medium.geojson: sql/water_medium.sql
+	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/water_medium.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/water_medium.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 7 },/g' data/geojson/water_medium.geojson
 
-data/geojson/water_small.geojson: data/geojson sql/water_small.sql
+data/geojson/water_small.geojson: sql/water_small.sql
+	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/water_small.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/water_small.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 13 },/g' data/geojson/water_small.geojson
 
-data/geojson/mtb.geojson: data/geojson sql/mtb.sql
+data/geojson/mtb.geojson: sql/mtb.sql
+	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/mtb.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/mtb.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 8 },/g' data/geojson/mtb.geojson
 
-data/geojson/contour.geojson: data/geojson data/geojson/contour20.geojson data/geojson/contour100.geojson data/geojson/glacier_contour20.geojson data/geojson/glacier_contour100.geojson data/geojson/rock_contour20.geojson data/geojson/rock_contour100.geojson
+data/geojson/contour.geojson: data/geojson/contour20.geojson data/geojson/contour100.geojson data/geojson/glacier_contour20.geojson data/geojson/glacier_contour100.geojson data/geojson/rock_contour20.geojson data/geojson/rock_contour100.geojson
 	ogr2ogr -f GeoJSON data/geojson/contour.geojson data/geojson/contour20.geojson
 	ogr2ogr -f GeoJSON -append data/geojson/contour.geojson data/geojson/contour100.geojson
 	ogr2ogr -f GeoJSON -append data/geojson/contour.geojson data/geojson/glacier_contour20.geojson
@@ -117,31 +126,38 @@ data/geojson/contour.geojson: data/geojson data/geojson/contour20.geojson data/g
 	ogr2ogr -f GeoJSON -append data/geojson/contour.geojson data/geojson/rock_contour20.geojson
 	ogr2ogr -f GeoJSON -append data/geojson/contour.geojson data/geojson/rock_contour100.geojson
 
-data/geojson/contour20.geojson: data/geojson sql/contour20.sql
+data/geojson/contour20.geojson: sql/contour20.sql
+	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/contour20.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/contour20.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 13 },/g' data/geojson/contour20.geojson
 
-data/geojson/contour100.geojson: data/geojson sql/contour100.sql
+data/geojson/contour100.geojson: sql/contour100.sql
+	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/contour100.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/contour100.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 10 },/g' data/geojson/contour100.geojson
 
-data/geojson/glacier_contour20.geojson: data/geojson sql/glacier_contour20.sql
+data/geojson/glacier_contour20.geojson: sql/glacier_contour20.sql
+	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/glacier_contour20.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/glacier_contour20.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 13 },/g' data/geojson/glacier_contour20.geojson
 
-data/geojson/glacier_contour100.geojson: data/geojson sql/glacier_contour100.sql
+data/geojson/glacier_contour100.geojson: sql/glacier_contour100.sql
+	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/glacier_contour100.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/glacier_contour100.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 10 },/g' data/geojson/glacier_contour100.geojson
 
-data/geojson/rock_contour20.geojson: data/geojson sql/rock_contour20.sql
+data/geojson/rock_contour20.geojson: sql/rock_contour20.sql
+	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/rock_contour20.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/rock_contour20.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 13 },/g' data/geojson/rock_contour20.geojson
 
-data/geojson/rock_contour100.geojson: data/geojson sql/rock_contour100.sql
+data/geojson/rock_contour100.geojson: sql/rock_contour100.sql
+	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/rock_contour100.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/rock_contour100.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 10 },/g' data/geojson/rock_contour100.geojson
 
-data/geojson/natural_label.geojson: data/geojson data/geojson/natural_label.geojson sql/natural_label.sql
+data/geojson/natural_label.geojson: data/geojson/natural_label.geojson sql/natural_label.sql
+	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/natural_label.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/natural_label.sql
 
 # ----------------------------------------------------------------------------------------------------------------------
