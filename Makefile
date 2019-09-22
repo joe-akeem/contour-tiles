@@ -164,49 +164,53 @@ data/geojson/natural_label.geojson: data/geojson/natural_label.geojson sql/natur
 #	Building tifs
 # ----------------------------------------------------------------------------------------------------------------------
 
-data/tif:
-	mkdir data/tif
-
-data/tif/contour-3785-20m.tif: data/tif data/tif/contour-3785.tif
+data/tif/contour-3785-20m.tif: data/tif/contour-3785.tif
+	mkdir -p data/tif
 	gdal_contour -a elev -i 20 data/tif/contour-3785.tif data/tif/contour-3785-20m.tif
 
-data/tif/slope.tif: data/tif data/tif/contour-3785.tif
+data/tif/slope.tif: data/tif/contour-3785.tif
+	mkdir -p data/tif
 	gdaldem slope data/tif/contour-3785.tif data/tif/slope.tif
 
-data/tif/hillshade.tif: data/tif data/tif/contour-3785.tif
+data/tif/hillshade.tif: data/tif/contour-3785.tif
+	mkdir -p data/tif
 	gdaldem hillshade -z 5 data/tif/contour-3785.tif data/tif/hillshade.tif
 
-data/tif/contour-3785.tif: data/tif data/tif/contour-4326.tif
+data/tif/contour-3785.tif: data/tif/contour-4326.tif
+	mkdir -p data/tif
 	gdalwarp -s_srs EPSG:4326 -t_srs EPSG:3785 -r bilinear data/tif/contour-4326.tif data/tif/contour-3785.tif
 
 data/tif/contour-4326.tif: data/tif/srtm_38_03.tif data/tif/srtm_39_03.tif
 	gdal_merge.py -o data/tif/contour-4326.tif data/tif/srtm_38_03.tif data/tif/srtm_39_03.tif
 
-data/tif/srtm_38_03.tif: data/tif data/download/srtm_38_03.zip
+data/tif/srtm_38_03.tif: data/download/srtm_38_03.zip
+	mkdir -p data/tif
 	unzip -p data/download/srtm_38_03.zip srtm_38_03.tif > data/tif/srtm_38_03.tif
 
-data/tif/srtm_39_03.tif: data/tif data/download/srtm_39_03.zip
+data/tif/srtm_39_03.tif: data/download/srtm_39_03.zip
+	mkdir -p data/tif
 	unzip -p data/download/srtm_39_03.zip srtm_39_03.tif > data/tif/srtm_39_03.tif
 
 # ----------------------------------------------------------------------------------------------------------------------
 #	Downloads
 # ----------------------------------------------------------------------------------------------------------------------
 
-data/download:
-	mkdir data/download
-
-data/download/srtm_38_03.zip: data/download
+data/download/srtm_38_03.zip:
+	mkdir -p data/download
 	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_38_03.zip -O data/download/srtm_38_03.zip
 	touch $@
 
-data/download/srtm_39_03.zip: data/download
+data/download/srtm_39_03.zip:
+	mkdir -p data/download
 	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_39_03.zip -O data/download/srtm_39_03.zip
 	touch $@
 
-data/download/switzerland.osm.pbf: data/download
+data/download/switzerland.osm.pbf:
+	mkdir -p data/download
 	curl http://download.geofabrik.de/europe/switzerland-latest.osm.pbf --output data/download/switzerland.osm.pbf
 	touch $@
 
-data/download/oberbayern.osm.pbf: data/download
+data/download/oberbayern.osm.pbf:
+	mkdir -p data/download
 	curl https://download.geofabrik.de/europe/germany/bayern/oberbayern-latest.osm.pbf --output data/download/oberbayern.osm.pbf
 	touch $@
