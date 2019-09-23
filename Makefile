@@ -159,6 +159,7 @@ data/geojson/rock_contour100.geojson: sql/rock_contour100.sql
 data/geojson/natural_label.geojson: data/geojson/natural_label.geojson sql/natural_label.sql
 	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/natural_label.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/natural_label.sql
+	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 0 },/g' data/geojson/natural_label.geojson
 
 # ----------------------------------------------------------------------------------------------------------------------
 #	Building tifs

@@ -1980,6 +1980,55 @@
       }
     },
     {
+      "id": "label_peaks",
+      "type": "symbol",
+      "source": "europe",
+      "source-layer": "natural_label",
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "peak"
+        ]
+      ],
+      "layout": {
+        "text-field": "{elevation}\n{name}",
+        "text-font": [
+          "Open Sans Semibold Italic"
+        ],
+        "text-size": {
+          "stops": [
+            [
+              6,
+              10
+            ],
+            [
+              10,
+              10
+            ],
+            [
+              14,
+              14
+            ]
+          ]
+        },
+        "icon-image": "{maki}-11",
+        "icon-offset": [
+          2,
+          1
+        ],
+        "text-offset": [
+          2,
+          1
+        ]
+      },
+      "paint": {
+        "text-halo-color": "rgba(255, 255, 255, 1)",
+        "text-halo-width": 1
+      }
+    },
+    {
       "id": "tunnel_service_path_pedestrian",
       "type": "line",
       "source": "europe",
@@ -2516,5 +2565,6 @@
   "id": "1ln66rsxs",
   "name": "Europe",
   "owner": "singletrail-map.eu",
-  "glyphs": "http://glfonts.lukasmartinelli.ch/fonts/{fontstack}/{range}.pbf"
+  "glyphs": "http://glfonts.lukasmartinelli.ch/fonts/{fontstack}/{range}.pbf",
+  "sprite": "mapbox://sprites/mapbox/bright-v9"
 }
