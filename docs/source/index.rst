@@ -42,6 +42,8 @@ available at lower-numbered zoom levels, and more features are available as you 
 +------------------------+---------------------------------+
 | :ref:`natural_label`   | 0                               |
 +------------------------+---------------------------------+
+| :ref:`place_label`   | 0                               |
++------------------------+---------------------------------+
 | :ref:`landuse_overlay` | 5                               |
 +------------------------+---------------------------------+
 | :ref:`road`            | 5                               |
@@ -66,11 +68,11 @@ The ``admin_level`` field separates different levels of boundaries.
 +------------------------+----------------------------------------+
 | **Value**              | **Description**                        |
 +------------------------+----------------------------------------+
-| 0                      | Countries                              |
+| 2                      | Countries                              |
 +------------------------+----------------------------------------+
-| 1                      | First-level administrative divisions   |
+| 3                      | First-level administrative divisions   |
 +------------------------+----------------------------------------+
-| 2                      | Second-level administrative divisions  |
+| 4                      | Second-level administrative divisions  |
 +------------------------+----------------------------------------+
 
 .. _building:
@@ -150,7 +152,7 @@ The main field used for styling the landuse_overlay layer is ``class``.
 |                        | recreation and environmental protection                              |
 +------------------------+----------------------------------------------------------------------+
 | wetland                | Wetlands that may include vegetation (marsh, swamp, bog)             |
-+------------------------+----------------------------------------------------------------------+
++------------------------+---------------------------------------------------------------------+
 
 .. _natural_label:
 
@@ -188,6 +190,53 @@ class - *text*, maki - *text*
 elevation - *number*
 ^^^^^^^^^^^^^^^^^^^^
 Holds the feature elevation in meters. May be *null*.
+
+. _place_label:
+
+place_label
+-----------
+Type: Point
+
+This layer contains points for labeling places including countries, cities, towns, and neighborhoods.
+
+class - *text*
+^^^^^^^^^^^^^^
+The ``class`` field provides a broad distinction between place types. The possible values are:
+
++------------------------+----------------------------------------------------------------------+
+| **Value**              | **Encompasses Types**                                                |
++------------------------+----------------------------------------------------------------------+
+| country                | country                                                              |
++------------------------+----------------------------------------------------------------------+
+| settlement             | city, town, village, hamlet                                          |
++------------------------+----------------------------------------------------------------------+
+| settlement_subdivision | suburb, quarter, neighbourhood                                       |
++------------------------+----------------------------------------------------------------------+
+
+type - *text*
+^^^^^^^^^^^^^
+The main field for styling labels for different kinds of places is type.
+
++------------------------+----------------------------------------------------------------------+
+| **Value**              | **Description**                                                      |
++------------------------+----------------------------------------------------------------------+
+| country                | Sovereign or partially-recognized states                             |
++------------------------+----------------------------------------------------------------------+
+| city                   | Settlement of about 100,000 or more people.                          |
++------------------------+----------------------------------------------------------------------+
+| town                   | Urban or rural settlement of about 10,000-100,000 people.            |
++------------------------+----------------------------------------------------------------------+
+| village                | Usually rural settlement of less than about 10,000.                  |
++------------------------+----------------------------------------------------------------------+
+| hamlet                 | Rural settlement with a population of about 200 or fewer.            |
++------------------------+----------------------------------------------------------------------+
+| suburb                 | A distinct section of an urban settlement such as an annexed town,   |
+|                        | historical district, or large & important neighborhood.              |
++------------------------+----------------------------------------------------------------------+
+| quarter                | A large neighborhood or section of a larger city or town.            |
++------------------------+----------------------------------------------------------------------+
+| neighbourhood          | A smaller neighborhood or part of a larger settlement.               |
++------------------------+----------------------------------------------------------------------+
 
 .. _water:
 
