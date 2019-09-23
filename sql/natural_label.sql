@@ -13,6 +13,7 @@ SELECT
        case
            when waterway IN ('canal', 'river', 'stream') then waterway
            when planet_osm_line.natural in ('valley') then planet_osm_line.natural
+           when waterway = 'waterfall' then 'waterfall'
        end as type,
        null as elevation,
        way as geom
