@@ -3,20 +3,19 @@
   "sources": {
     "europe": {
       "type": "vector",
-      "type": "vector",
-      "url": "mbtiles://europe.mbtiles"
+      "url": "http://tileserver.singletrail-map.eu/data/europe.json"
     },
     "contour": {
       "type": "vector",
-      "url": "mbtiles://contour.mbtiles"
+      "url": "http://tileserver.singletrail-map.eu/data/contour.json"
     },
     "hillshade": {
       "type": "raster",
-      "url": "mbtiles://hillshade.mbtiles"
+      "url": "http://tileserver.singletrail-map.eu/data/hillshade.json"
     },
     "slope": {
       "type": "raster",
-      "url": "mbtiles://slope.mbtiles"
+      "url": "http://tileserver.singletrail-map.eu/data/slope.json"
     }
   },
   "layers": [
