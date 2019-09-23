@@ -3,19 +3,19 @@
   "sources": {
     "europe": {
       "type": "vector",
-      "url": "mbtiles://europe.mbtiles"
+      "url": "http://tileserver.singletrail-map.eu/data/europe.json"
     },
     "contour": {
       "type": "vector",
-      "url": "mbtiles://contour.mbtiles"
+      "url": "http://tileserver.singletrail-map.eu/data/contour.json"
     },
     "hillshade": {
       "type": "raster",
-      "url": "mbtiles://hillshade.mbtiles"
+      "url": "http://tileserver.singletrail-map.eu/data/hillshade.json"
     },
     "slope": {
       "type": "raster",
-      "url": "mbtiles://slope.mbtiles"
+      "url": "http://tileserver.singletrail-map.eu/data/slope.json"
     }
   },
   "layers": [
@@ -2026,6 +2026,145 @@
       "paint": {
         "text-halo-color": "rgba(255, 255, 255, 1)",
         "text-halo-width": 1
+      }
+    },
+    {
+      "id": "label_meadow",
+      "type": "symbol",
+      "source": "europe",
+      "source-layer": "natural_label",
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "meadow"
+        ]
+      ],
+      "layout": {
+        "text-font": [
+          "Open Sans Italic"
+        ],
+        "text-field": "{name}",
+        "symbol-placement": "point",
+        "symbol-spacing": 250,
+        "text-size": {
+          "stops": [
+            [
+              6,
+              10
+            ],
+            [
+              14,
+              12
+            ]
+          ]
+        }
+      },
+      "paint": {
+        "text-color": "rgba(0, 0, 0, 1)"
+      }
+    },
+    {
+      "id": "label_glacier",
+      "type": "symbol",
+      "source": "europe",
+      "source-layer": "natural_label",
+      "filter": [
+        "all",
+        [
+          "in",
+          "class",
+          "glacier"
+        ]
+      ],
+      "layout": {
+        "text-font": [
+          "Open Sans Italic"
+        ],
+        "text-field": "{name}",
+        "symbol-placement": "point",
+        "symbol-spacing": 250,
+        "text-size": {
+          "stops": [
+            [
+              6,
+              10
+            ],
+            [
+              14,
+              12
+            ]
+          ]
+        }
+      },
+      "paint": {
+        "text-color": "rgba(60, 132, 170, 1)"
+      }
+    },
+    {
+      "id": "label_lake",
+      "type": "symbol",
+      "source": "europe",
+      "source-layer": "natural_label",
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "lake"
+        ]
+      ],
+      "layout": {
+        "text-font": [
+          "Open Sans Italic"
+        ],
+        "text-field": "{name}",
+        "symbol-placement": "point",
+        "symbol-spacing": 250,
+        "text-size": 16
+      },
+      "paint": {
+        "text-color": "rgba(60, 132, 170, 1)"
+      }
+    },
+    {
+      "id": "label_rivers",
+      "type": "symbol",
+      "source": "europe",
+      "source-layer": "natural_label",
+      "filter": [
+        "all",
+        [
+          "in",
+          "class",
+          "canal",
+          "river",
+          "stream"
+        ]
+      ],
+      "layout": {
+        "text-font": [
+          "Open Sans Italic"
+        ],
+        "text-field": "{name}",
+        "symbol-placement": "line",
+        "symbol-spacing": 250,
+        "text-size": {
+          "stops": [
+            [
+              6,
+              10
+            ],
+            [
+              14,
+              12
+            ]
+          ]
+        }
+      },
+      "paint": {
+        "text-color": "rgba(60, 132, 170, 1)"
       }
     },
     {
