@@ -261,7 +261,7 @@
           "in",
           "class",
           "stream",
-          " canal"
+          "canal"
         ]
       ],
       "paint": {
@@ -295,7 +295,10 @@
       "id": "building",
       "type": "fill",
       "source": "europe",
-      "source-layer": "building"
+      "source-layer": "building",
+      "paint": {
+        "fill-color": "rgba(16, 16, 16, 1)"
+      }
     },
     {
       "id": "road_minor_rail_casing",
@@ -332,7 +335,8 @@
               2.1
             ]
           ]
-        }
+        },
+        "line-color": "rgba(0, 0, 0, 1)"
       },
       "layout": {
         "visibility": "visible"
@@ -402,7 +406,7 @@
         ]
       ],
       "paint": {
-        "line-color": "rgba(0, 0, 0, 1)",
+        "line-color": "rgba(43, 42, 42, 1)",
         "line-width": {
           "stops": [
             [
@@ -555,7 +559,7 @@
         ]
       ],
       "paint": {
-        "line-color": "rgba(0, 0, 0, 1)",
+        "line-color": "rgba(43, 42, 42, 1)",
         "line-width": {
           "stops": [
             [
@@ -2283,7 +2287,7 @@
       }
     },
     {
-      "id": "label_peaks",
+      "id": "natural_label_peaks",
       "type": "symbol",
       "source": "europe",
       "source-layer": "natural_label",
@@ -2329,10 +2333,11 @@
       "paint": {
         "text-halo-color": "rgba(255, 255, 255, 1)",
         "text-halo-width": 1
-      }
+      },
+      "minzoom": 11
     },
     {
-      "id": "label_valley",
+      "id": "natural_label_valley",
       "type": "symbol",
       "source": "europe",
       "source-layer": "natural_label",
@@ -2374,7 +2379,7 @@
       }
     },
     {
-      "id": "label_saddle",
+      "id": "natural_label_saddle",
       "type": "symbol",
       "source": "europe",
       "source-layer": "natural_label",
@@ -2416,7 +2421,7 @@
       }
     },
     {
-      "id": "label_meadow",
+      "id": "natural_label_meadow",
       "type": "symbol",
       "source": "europe",
       "source-layer": "natural_label",
@@ -2450,10 +2455,11 @@
       },
       "paint": {
         "text-color": "rgba(0, 0, 0, 1)"
-      }
+      },
+      "minzoom": 13
     },
     {
-      "id": "label_glacier",
+      "id": "natural_label_glacier",
       "type": "symbol",
       "source": "europe",
       "source-layer": "natural_label",
@@ -2490,7 +2496,7 @@
       }
     },
     {
-      "id": "label_lake",
+      "id": "natural_label_lake",
       "type": "symbol",
       "source": "europe",
       "source-layer": "natural_label",
@@ -2513,10 +2519,11 @@
       },
       "paint": {
         "text-color": "rgba(60, 132, 170, 1)"
-      }
+      },
+      "minzoom": 11
     },
     {
-      "id": "label_wetland",
+      "id": "natural_label_wetland",
       "type": "symbol",
       "source": "europe",
       "source-layer": "natural_label",
@@ -2554,10 +2561,11 @@
       },
       "paint": {
         "text-color": "rgba(60, 132, 170, 1)"
-      }
+      },
+      "minzoom": 11
     },
     {
-      "id": "label_rivers",
+      "id": "natural_label_rivers",
       "type": "symbol",
       "source": "europe",
       "source-layer": "natural_label",
@@ -2593,7 +2601,164 @@
       },
       "paint": {
         "text-color": "rgba(60, 132, 170, 1)"
-      }
+      },
+      "minzoom": 11
+    },
+    {
+      "id": "place_label_other",
+      "type": "symbol",
+      "source": "europe",
+      "source-layer": "place_label",
+      "filter": [
+        "all",
+        [
+          "in",
+          "type",
+          "hamlet",
+          "suburb",
+          "neighbourhood"
+        ]
+      ],
+      "layout": {
+        "text-font": [
+          "Open Sans Semibold"
+        ],
+        "text-field": "{name}",
+        "text-size": {
+          "stops": [
+            [
+              10,
+              10
+            ],
+            [
+              15,
+              14
+            ]
+          ]
+        },
+        "visibility": "visible"
+      },
+      "paint": {
+        "text-halo-width": 1.2,
+        "text-color": "rgba(0, 0, 0, 1)",
+        "text-halo-color": "rgba(255, 255, 255, 1)"
+      },
+      "minzoom": 12
+    },
+    {
+      "id": "place_label_village",
+      "type": "symbol",
+      "source": "europe",
+      "source-layer": "place_label",
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "village"
+        ]
+      ],
+      "layout": {
+        "text-font": [
+          "Open Sans Semibold"
+        ],
+        "text-field": "{name}",
+        "text-size": {
+          "stops": [
+            [
+              10,
+              12
+            ],
+            [
+              15,
+              22
+            ]
+          ]
+        },
+        "visibility": "visible"
+      },
+      "paint": {
+        "text-halo-width": 1.2,
+        "text-color": "rgba(0, 0, 0, 1)",
+        "text-halo-color": "rgba(255, 255, 255, 1)"
+      },
+      "minzoom": 10
+    },
+    {
+      "id": "place_label_town",
+      "type": "symbol",
+      "source": "europe",
+      "source-layer": "place_label",
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "town"
+        ]
+      ],
+      "layout": {
+        "text-font": [
+          "Open Sans Semibold"
+        ],
+        "text-field": "{name}",
+        "text-size": {
+          "stops": [
+            [
+              10,
+              14
+            ],
+            [
+              15,
+              24
+            ]
+          ]
+        }
+      },
+      "paint": {
+        "text-halo-width": 1.2,
+        "text-color": "rgba(0, 0, 0, 1)",
+        "text-halo-color": "rgba(255, 255, 255, 1)"
+      },
+      "minzoom": 0
+    },
+    {
+      "id": "place_label_city",
+      "type": "symbol",
+      "source": "europe",
+      "source-layer": "place_label",
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "city"
+        ]
+      ],
+      "layout": {
+        "text-font": [
+          "Open Sans Semibold"
+        ],
+        "text-field": "{name}",
+        "text-size": {
+          "stops": [
+            [
+              7,
+              14
+            ],
+            [
+              11,
+              24
+            ]
+          ]
+        }
+      },
+      "paint": {
+        "text-halo-width": 1.2,
+        "text-color": "rgba(0, 0, 0, 1)",
+        "text-halo-color": "rgba(255, 255, 255, 1)"
+      },
+      "minzoom": 0
     },
     {
       "id": "tunnel_minor_rail",
@@ -3015,6 +3180,28 @@
         }
       },
       "minzoom": 8
+    },
+    {
+      "id": "admin_country",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "admin",
+      "filter": [
+        "all",
+        [
+          "==",
+          "admin_level",
+          2
+        ]
+      ],
+      "paint": {
+        "line-color": "rgba(203, 118, 116, 1)",
+        "line-width": 10,
+        "line-opacity": 0.2
+      },
+      "layout": {
+        "visibility": "visible"
+      }
     },
     {
       "id": "hillshade",
