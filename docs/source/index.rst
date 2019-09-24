@@ -279,28 +279,16 @@ class - *text*, type - *text*
 +------------------------+----------------------------------------------------------------------+
 | **Value**              | **Possible Values for Type**                                         |
 +------------------------+----------------------------------------------------------------------+
-| sustenance             | bar, bbq, biergarten, cafe, drinking_water, fast_food, food_court,   |
-|                        | ice_cream, pub, restaurant                                           |
+| sustenance             | bar, biergarten, cafe, drinking_water, pub, restaurant               |
 +------------------------+----------------------------------------------------------------------+
-| education              | college, driving_school, kindergarten, language_school, library,     |
-|                        | music_school, school, university                                     |
+| education              | college, kindergarten, library, school, university                   |
 +------------------------+----------------------------------------------------------------------+
-| transportation         | bicycle_parking, bicycle_repair_station, bicycle_rental,             |
-|                        | boat_rental, boat_sharing, bus_station, car_rental, car_sharing,     |
-|                        | car_wash, vehicle_inspection, charging_station, ferry_terminal,      |
-|                        | fuel, grit_bin, motorcycle_parking, parking, parking_entrance,       |
-|                        | parking_space, taxi                                                  |
+| transportation         | bicycle_repair_station, bicycle_rental, bus_station, ferry_terminal, |
+|                        | parking, parking_space, taxi                                         |
 +------------------------+----------------------------------------------------------------------+
-| financial              | atm, bank, bureau_de_change                                          |
+| financial              | atm, bank                                                            |
 +------------------------+----------------------------------------------------------------------+
-| healthcare             | baby_hatch, clinic, dentist, doctors, hospital, nursing_home,        |
-|                        | pharmacy, social_facility, veterinary                                |
-+------------------------+----------------------------------------------------------------------+
-| entertainment          | arts_centre, brothel, casino, cinema, community_centre, fountain,    |
-|                        | gambling, nightclub, planetarium, public_bookcase, social_centre,    |
-|                        | stripclub, studio, swingerclub, theatre                              |
-+------------------------+----------------------------------------------------------------------+
-| other                  |                                                                      |
+| healthcare             | clinic, dentist, doctors, hospital, pharmacy, social_facility        |
 +------------------------+----------------------------------------------------------------------+
 
 .. _water:
