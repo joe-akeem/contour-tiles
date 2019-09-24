@@ -36,6 +36,8 @@ available at lower-numbered zoom levels, and more features are available as you 
 +------------------------+---------------------------------+
 | :ref:`admin`           | 0                               |
 +------------------------+---------------------------------+
+| :ref:`aeroway`         | 9                               |
++------------------------+---------------------------------+
 | :ref:`building`        | 13                              |
 +------------------------+---------------------------------+
 | :ref:`landuse`         | 5                               |
@@ -78,6 +80,31 @@ The ``admin_level`` field separates different levels of boundaries.
 +------------------------+----------------------------------------+
 
 .. _building:
+
+.. _aeroway:
+
+aeroway
+-------
+Type: Polygon, Linestring
+
+The aeroway layer includes both lines and polygons representing runways, helipads, etc.
+
+type - *text*
+^^^^^^^^^^^^^
+The ``type` field separates different types of aeroways for styling.`
+
++------------------------+----------------------------------------------------------------------+
+| **Value**              | **Description**                                                      |
++------------------------+----------------------------------------------------------------------+
+| runway                 | Where planes take off & land                                         |
++------------------------+----------------------------------------------------------------------+
+| taxiway                | Where planes move between runways, gates, and hangars                |
++------------------------+----------------------------------------------------------------------+
+| apron                  | Where planes park, refuel, load                                      |
++------------------------+----------------------------------------------------------------------+
+| helipad                | Where helicopters take off & land                                    |
++------------------------+----------------------------------------------------------------------+
+
 
 building
 --------

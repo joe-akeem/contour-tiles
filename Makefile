@@ -26,9 +26,9 @@ shp2pgsql-contour: data/tif/contour-3785-20m.tif
 #	Building mbtiles
 # ----------------------------------------------------------------------------------------------------------------------
 
-data/mbtiles/europe.mbtiles: data/geojson/landuse.geojson data/geojson/landuse_overlay.geojson data/geojson/admin.geojson data/geojson/building.geojson data/geojson/road.geojson data/geojson/waterway.geojson data/geojson/water.geojson data/geojson/natural_label.geojson data/geojson/place_label.geojson data/geojson/poi_label.geojson
+data/mbtiles/europe.mbtiles: data/geojson/landuse.geojson data/geojson/landuse_overlay.geojson data/geojson/admin.geojson data/geojson/building.geojson data/geojson/road.geojson data/geojson/waterway.geojson data/geojson/water.geojson data/geojson/natural_label.geojson data/geojson/place_label.geojson data/geojson/poi_label.geojson data/geojson/aeroway.geojson
 	mkdir -p data/mbtiles
-	tippecanoe -f -o data/mbtiles/europe.mbtiles --drop-densest-as-needed data/geojson/landuse.geojson data/geojson/landuse_overlay.geojson data/geojson/admin.geojson data/geojson/building.geojson data/geojson/road.geojson data/geojson/waterway.geojson data/geojson/water.geojson data/geojson/natural_label.geojson data/geojson/place_label.geojson data/geojson/poi_label.geojson
+	tippecanoe -f -o data/mbtiles/europe.mbtiles --drop-densest-as-needed data/geojson/landuse.geojson data/geojson/landuse_overlay.geojson data/geojson/admin.geojson data/geojson/building.geojson data/geojson/road.geojson data/geojson/waterway.geojson data/geojson/water.geojson data/geojson/natural_label.geojson data/geojson/place_label.geojson data/geojson/poi_label.geojson data/geojson/aeroway.geojson
 
 data/mbtiles/mtb.mbtiles: data/geojson/mtb.geojson
 	mkdir -p data/mbtiles
@@ -173,6 +173,11 @@ data/geojson/poi_label.geojson: sql/poi_label.sql
 	mkdir -p data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/poi_label.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/poi_label.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 5 },/g' data/geojson/poi_label.geojson
+
+data/geojson/aeroway.geojson: sql/aeroway.sql
+	mkdir -p data/geojson
+	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/aeroway.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/aeroway.sql
+	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 9 },/g' data/geojson/aeroway.geojson
 # ----------------------------------------------------------------------------------------------------------------------
 #	Building tifs
 # ----------------------------------------------------------------------------------------------------------------------
