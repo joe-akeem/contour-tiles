@@ -18,7 +18,7 @@
       "url": "mbtiles://slope.mbtiles"
     },
     "mtb": {
-      "type": "raster",
+      "type": "vector",
       "url": "mbtiles://mtb.mbtiles"
     }
   },
