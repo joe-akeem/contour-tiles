@@ -629,6 +629,11 @@
           "structure",
           "bridge",
           "tunnel"
+        ],
+        [
+          "!=",
+          "type",
+          "piste"
         ]
       ],
       "layout": {
@@ -2314,7 +2319,8 @@
               13
             ]
           ]
-        }
+        },
+        "visibility": "visible"
       },
       "minzoom": 13,
       "paint": {
@@ -2322,7 +2328,15 @@
         "text-halo-blur": 0.5,
         "text-color": "rgba(0, 0, 0, 1)",
         "text-halo-color": "rgba(255, 255, 255, 1)"
-      }
+      },
+      "filter": [
+        "all",
+        [
+          "!=",
+          "type",
+          "piste"
+        ]
+      ]
     },
     {
       "id": "natural_label_peaks",
@@ -2414,7 +2428,8 @@
       },
       "paint": {
         "text-color": "rgba(0, 0, 0, 1)"
-      }
+      },
+      "minzoom": 11
     },
     {
       "id": "natural_label_saddle",
@@ -2455,8 +2470,12 @@
         ]
       },
       "paint": {
-        "text-color": "rgba(0, 0, 0, 1)"
-      }
+        "text-color": "rgba(0, 0, 0, 1)",
+        "text-halo-color": "rgba(255, 255, 255, 1)",
+        "text-halo-width": 0.8,
+        "text-halo-blur": 0.5
+      },
+      "minzoom": 11
     },
     {
       "id": "natural_label_meadow",
@@ -2531,7 +2550,8 @@
       },
       "paint": {
         "text-color": "rgba(60, 132, 170, 1)"
-      }
+      },
+      "minzoom": 11
     },
     {
       "id": "natural_label_lake",
@@ -2758,7 +2778,7 @@
         "text-color": "rgba(0, 0, 0, 1)",
         "text-halo-color": "rgba(255, 255, 255, 1)"
       },
-      "minzoom": 0
+      "minzoom": 10
     },
     {
       "id": "place_label_city",
@@ -2796,7 +2816,7 @@
         "text-color": "rgba(0, 0, 0, 1)",
         "text-halo-color": "rgba(255, 255, 255, 1)"
       },
-      "minzoom": 0
+      "minzoom": 8
     },
     {
       "id": "tunnel_minor_rail",
@@ -3582,6 +3602,79 @@
           "runway"
         ]
       ]
+    },
+    {
+      "id": "airport_label",
+      "type": "symbol",
+      "source": "europe",
+      "source-layer": "airport_label",
+      "layout": {
+        "text-font": [
+          "Open Sans Semibold"
+        ],
+        "text-field": "{name}",
+        "icon-image": "{maki}-11",
+        "icon-offset": [
+          0,
+          0
+        ],
+        "text-offset": [
+          0,
+          1
+        ],
+        "visibility": "visible",
+        "text-size": 12
+      },
+      "paint": {
+        "text-color": "rgba(102, 102, 102, 1)",
+        "icon-halo-color": "rgba(255, 255, 255, 1)",
+        "icon-halo-width": 0,
+        "icon-halo-blur": 0,
+        "text-halo-width": 1,
+        "text-halo-blur": 0.5,
+        "text-halo-color": "rgba(255, 255, 255, 1)"
+      },
+      "minzoom": 12,
+      "filter": [
+        "all"
+      ]
+    },
+    {
+      "id": "poi_label_alpine_hut",
+      "type": "symbol",
+      "source": "europe",
+      "source-layer": "poi_label",
+      "filter": [
+        "all",
+        [
+          "==",
+          "class",
+          "tourism"
+        ],
+        [
+          "==",
+          "type",
+          "alpine_hut"
+        ]
+      ],
+      "layout": {
+        "text-font": [
+          "Open Sans Regular"
+        ],
+        "text-field": "{name}",
+        "icon-image": "lodging-11",
+        "text-offset": [
+          0,
+          1.5
+        ],
+        "text-size": 10
+      },
+      "minzoom": 12,
+      "paint": {
+        "text-halo-color": "rgba(255, 255, 255, 1)",
+        "text-halo-width": 1,
+        "text-halo-blur": 0.5
+      }
     },
     {
       "id": "hillshade",
