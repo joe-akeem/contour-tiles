@@ -26,23 +26,25 @@ shp2pgsql-contour: data/tif/contour-3785-20m.tif
 #	Building mbtiles
 # ----------------------------------------------------------------------------------------------------------------------
 
-data/mbtiles:
-	mkdir data/mbtiles
+data/mbtiles/europe.mbtiles: data/geojson/landuse.geojson data/geojson/landuse_overlay.geojson data/geojson/admin.geojson data/geojson/building.geojson data/geojson/road.geojson data/geojson/waterway.geojson data/geojson/water.geojson data/geojson/natural_label.geojson data/geojson/place_label.geojson data/geojson/poi_label.geojson
+	mkdir -p data/mbtiles
+	tippecanoe -f -o data/mbtiles/europe.mbtiles --drop-densest-as-needed data/geojson/landuse.geojson data/geojson/landuse_overlay.geojson data/geojson/admin.geojson data/geojson/building.geojson data/geojson/road.geojson data/geojson/waterway.geojson data/geojson/water.geojson data/geojson/natural_label.geojson data/geojson/place_label.geojson data/geojson/poi_label.geojson
 
-data/mbtiles/europe.mbtiles: data/mbtiles data/geojson/landuse.geojson data/geojson/landuse_overlay.geojson data/geojson/admin.geojson data/geojson/building.geojson data/geojson/road.geojson data/geojson/waterway.geojson data/geojson/water.geojson data/geojson/natural_label.geojson data/geojson/place_label.geojson
-	tippecanoe -f -o data/mbtiles/europe.mbtiles data/geojson/landuse.geojson data/geojson/landuse_overlay.geojson data/geojson/admin.geojson data/geojson/building.geojson data/geojson/road.geojson data/geojson/waterway.geojson data/geojson/water.geojson data/geojson/natural_label.geojson data/geojson/place_label.geojson
-
-data/mbtiles/mtb.mbtiles: data/mbtiles data/geojson/mtb.geojson
+data/mbtiles/mtb.mbtiles: data/geojson/mtb.geojson
+	mkdir -p data/mbtiles
 	tippecanoe -f -o data/mbtiles/mtb.mbtiles data/geojson/mtb.geojson
 
-data/mbtiles/contour.mbtiles: data/mbtiles data/geojson/contour.geojson
+data/mbtiles/contour.mbtiles: data/geojson/contour.geojson
+	mkdir -p data/mbtiles
 	tippecanoe -f -o data/mbtiles/contour.mbtiles data/geojson/contour.geojson
 
-data/mbtiles/hillshade.mbtiles: data/mbtiles data/tif/hillshade.tif
+data/mbtiles/hillshade.mbtiles: data/tif/hillshade.tif
+	mkdir -p data/mbtiles
 	gdal_translate data/hillshade.tif data/mbtiles/hillshade.mbtiles -of MBTILES
 	gdaladdo -r nearest hillshade.mbtiles 2 4 8 16
 
-data/mbtiles/slope.mbtiles: data/mbtiles data/tif/slope.tif
+data/mbtiles/slope.mbtiles: data/tif/slope.tif
+	mkdir -p data/mbtiles
 	gdal_translate data/slope.tif data/mbtiles/slope.mbtiles -of MBTILES
 	gdaladdo -r nearest slope.mbtiles 2 4 8 16
 
@@ -167,6 +169,10 @@ data/geojson/place_label.geojson: sql/place_label.sql
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/place_label.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/place_label.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 0 },/g' data/geojson/place_label.geojson
 
+data/geojson/poi_label.geojson: sql/poi_label.sql
+	mkdir -p data/geojson
+	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/poi_label.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/poi_label.sql
+	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 5 },/g' data/geojson/poi_label.geojson
 # ----------------------------------------------------------------------------------------------------------------------
 #	Building tifs
 # ----------------------------------------------------------------------------------------------------------------------

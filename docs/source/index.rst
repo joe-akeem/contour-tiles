@@ -42,7 +42,9 @@ available at lower-numbered zoom levels, and more features are available as you 
 +------------------------+---------------------------------+
 | :ref:`natural_label`   | 0                               |
 +------------------------+---------------------------------+
-| :ref:`place_label`   | 0                               |
+| :ref:`place_label`     | 0                               |
++------------------------+---------------------------------+
+| :ref:`poi_label`       | 5                               |
 +------------------------+---------------------------------+
 | :ref:`landuse_overlay` | 5                               |
 +------------------------+---------------------------------+
@@ -152,7 +154,7 @@ The main field used for styling the landuse_overlay layer is ``class``.
 |                        | recreation and environmental protection                              |
 +------------------------+----------------------------------------------------------------------+
 | wetland                | Wetlands that may include vegetation (marsh, swamp, bog)             |
-+------------------------+---------------------------------------------------------------------+
++------------------------+----------------------------------------------------------------------+
 
 .. _natural_label:
 
@@ -191,7 +193,7 @@ elevation - *number*
 ^^^^^^^^^^^^^^^^^^^^
 Holds the feature elevation in meters. May be *null*.
 
-. _place_label:
+.. _place_label:
 
 place_label
 -----------
@@ -236,6 +238,42 @@ The main field for styling labels for different kinds of places is type.
 | quarter                | A large neighborhood or section of a larger city or town.            |
 +------------------------+----------------------------------------------------------------------+
 | neighbourhood          | A smaller neighborhood or part of a larger settlement.               |
++------------------------+----------------------------------------------------------------------+
+
+.. _poi_label:
+
+poi_label
+----------
+Type: Point
+
+class - *text*, type - *text*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
++------------------------+----------------------------------------------------------------------+
+| **Value**              | **Possible Values for Type**                                         |
++------------------------+----------------------------------------------------------------------+
+| sustenance             | bar, bbq, biergarten, cafe, drinking_water, fast_food, food_court,   |
+|                        | ice_cream, pub, restaurant                                           |
++------------------------+----------------------------------------------------------------------+
+| education              | college, driving_school, kindergarten, language_school, library,     |
+|                        | music_school, school, university                                     |
++------------------------+----------------------------------------------------------------------+
+| transportation         | bicycle_parking, bicycle_repair_station, bicycle_rental,             |
+|                        | boat_rental, boat_sharing, bus_station, car_rental, car_sharing,     |
+|                        | car_wash, vehicle_inspection, charging_station, ferry_terminal,      |
+|                        | fuel, grit_bin, motorcycle_parking, parking, parking_entrance,       |
+|                        | parking_space, taxi                                                  |
++------------------------+----------------------------------------------------------------------+
+| financial              | atm, bank, bureau_de_change                                          |
++------------------------+----------------------------------------------------------------------+
+| healthcare             | baby_hatch, clinic, dentist, doctors, hospital, nursing_home,        |
+|                        | pharmacy, social_facility, veterinary                                |
++------------------------+----------------------------------------------------------------------+
+| entertainment          | arts_centre, brothel, casino, cinema, community_centre, fountain,    |
+|                        | gambling, nightclub, planetarium, public_bookcase, social_centre,    |
+|                        | stripclub, studio, swingerclub, theatre                              |
++------------------------+----------------------------------------------------------------------+
+| other                  |                                                                      |
 +------------------------+----------------------------------------------------------------------+
 
 .. _water:
