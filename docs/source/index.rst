@@ -91,7 +91,7 @@ The aeroway layer includes both lines and polygons representing runways, helipad
 
 type - *text*
 ^^^^^^^^^^^^^
-The ``type` field separates different types of aeroways for styling.`
+The ``type`` field separates different types of aeroways for styling.`
 
 +------------------------+----------------------------------------------------------------------+
 | **Value**              | **Description**                                                      |
@@ -289,6 +289,9 @@ class - *text*, type - *text*
 | financial              | atm, bank                                                            |
 +------------------------+----------------------------------------------------------------------+
 | healthcare             | clinic, dentist, doctors, hospital, pharmacy, social_facility        |
++------------------------+----------------------------------------------------------------------+
+| tourism                | caravan_site, alpine_hut, zoo, summit_cross, lodge, hostel,          |
+|                        | guest_house, hotel, camp_site, motel, youth hostel                   |
 +------------------------+----------------------------------------------------------------------+
 
 .. _water:
