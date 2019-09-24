@@ -792,7 +792,8 @@
           "in",
           "class",
           "secondary",
-          "tertiary"
+          "tertiary",
+          "roundabout"
         ],
         [
           "!in",
@@ -836,7 +837,8 @@
           "in",
           "class",
           "secondary",
-          "tertiary"
+          "tertiary",
+          "roundabout"
         ],
         [
           "!in",
@@ -2287,6 +2289,38 @@
       }
     },
     {
+      "id": "road_label",
+      "type": "symbol",
+      "source": "europe",
+      "source-layer": "road",
+      "layout": {
+        "symbol-placement": "line",
+        "text-field": "{name}",
+        "text-font": [
+          "Open Sans Regular"
+        ],
+        "text-size": {
+          "stops": [
+            [
+              13,
+              12
+            ],
+            [
+              14,
+              13
+            ]
+          ]
+        }
+      },
+      "minzoom": 13,
+      "paint": {
+        "text-halo-width": 1,
+        "text-halo-blur": 0.5,
+        "text-color": "rgba(0, 0, 0, 1)",
+        "text-halo-color": "rgba(255, 255, 255, 1)"
+      }
+    },
+    {
       "id": "natural_label_peaks",
       "type": "symbol",
       "source": "europe",
@@ -3202,6 +3236,78 @@
       "layout": {
         "visibility": "visible"
       }
+    },
+    {
+      "id": "aeroway",
+      "type": "fill",
+      "source": "europe",
+      "source-layer": "aeroway",
+      "paint": {
+        "fill-color": "rgba(51, 51, 48, 0.1)",
+        "fill-opacity": 0.7
+      }
+    },
+    {
+      "id": "aeroway_taxiway",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "aeroway",
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "taxiway"
+        ]
+      ],
+      "minzoom": 11,
+      "paint": {
+        "line-color": "rgba(195, 195, 189, 1)",
+        "line-width": {
+          "stops": [
+            [
+              11,
+              0.5
+            ],
+            [
+              20,
+              6
+            ]
+          ]
+        }
+      },
+      "layout": {
+        "visibility": "visible"
+      }
+    },
+    {
+      "id": "aeroway_runway",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "aeroway",
+      "paint": {
+        "line-color": "rgba(0, 0, 0, 1)",
+        "line-width": {
+          "stops": [
+            [
+              6,
+              0.2
+            ],
+            [
+              20,
+              1
+            ]
+          ]
+        }
+      },
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "runway"
+        ]
+      ]
     },
     {
       "id": "hillshade",
