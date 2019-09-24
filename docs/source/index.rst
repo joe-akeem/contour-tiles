@@ -38,6 +38,8 @@ available at lower-numbered zoom levels, and more features are available as you 
 +------------------------+---------------------------------+
 | :ref:`aeroway`         | 9                               |
 +------------------------+---------------------------------+
+| :ref:`airport_label`   | 9                               |
++------------------------+---------------------------------+
 | :ref:`building`        | 13                              |
 +------------------------+---------------------------------+
 | :ref:`landuse`         | 5                               |
@@ -79,8 +81,6 @@ The ``admin_level`` field separates different levels of boundaries.
 | 4                      | Second-level administrative divisions  |
 +------------------------+----------------------------------------+
 
-.. _building:
-
 .. _aeroway:
 
 aeroway
@@ -105,6 +105,27 @@ The ``type`` field separates different types of aeroways for styling.`
 | helipad                | Where helicopters take off & land                                    |
 +------------------------+----------------------------------------------------------------------+
 
+.. _airport_label:
+
+airport_label
+-------------
+This layer contains the labels for airports and helipads.
+
+type - *text*
+^^^^^^^^^^^^^
+Possible ``type`` values::
+
+   airport
+   heliport
+
+maki - *text*
+^^^^^^^^^^^^^
+Possible ``maki`` values::
+
+   airport
+   heliport
+
+.. _building:
 
 building
 --------
