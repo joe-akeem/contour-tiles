@@ -16,6 +16,10 @@
     "slope": {
       "type": "raster",
       "url": "mbtiles://slope.mbtiles"
+    },
+    "mtb": {
+      "type": "raster",
+      "url": "mbtiles://mtb.mbtiles"
     }
   },
   "layers": [
@@ -3236,6 +3240,276 @@
       "layout": {
         "visibility": "visible"
       }
+    },
+    {
+      "id": "mtb_path",
+      "type": "line",
+      "source": "europe",
+      "source-layer": "road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "path"
+        ]
+      ],
+      "paint": {
+        "line-color": "rgba(218, 204, 9, 1)",
+        "line-width": {
+          "stops": [
+            [
+              8,
+              3
+            ],
+            [
+              12,
+              5
+            ],
+            [
+              14,
+              10
+            ]
+          ]
+        },
+        "line-opacity": 0.3
+      },
+      "layout": {
+        "visibility": "none"
+      }
+    },
+    {
+      "id": "mtb_unknown",
+      "type": "line",
+      "source": "mtb",
+      "source-layer": "mtb_scale",
+      "paint": {
+        "line-color": "rgba(218, 204, 9, 1)",
+        "line-width": {
+          "stops": [
+            [
+              8,
+              3
+            ],
+            [
+              12,
+              5
+            ],
+            [
+              14,
+              10
+            ]
+          ]
+        },
+        "line-opacity": 0.3
+      },
+      "filter": [
+        "all",
+        [
+          "!in",
+          "scale",
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ]
+      ],
+      "minzoom": 0
+    },
+    {
+      "id": "mtb_s4_plus",
+      "type": "line",
+      "source": "mtb",
+      "source-layer": "mtb_scale",
+      "paint": {
+        "line-color": "rgba(0, 0, 0, 1)",
+        "line-width": {
+          "stops": [
+            [
+              8,
+              3
+            ],
+            [
+              12,
+              5
+            ],
+            [
+              14,
+              10
+            ]
+          ]
+        },
+        "line-opacity": 0.3
+      },
+      "filter": [
+        "all",
+        [
+          "in",
+          "scale",
+          "4",
+          "5"
+        ]
+      ],
+      "minzoom": 0
+    },
+    {
+      "id": "mtb_s3",
+      "type": "line",
+      "source": "mtb",
+      "source-layer": "mtb_scale",
+      "paint": {
+        "line-color": "rgba(135, 13, 13, 1)",
+        "line-width": {
+          "stops": [
+            [
+              8,
+              3
+            ],
+            [
+              12,
+              5
+            ],
+            [
+              14,
+              10
+            ]
+          ]
+        },
+        "line-opacity": 0.3
+      },
+      "filter": [
+        "all",
+        [
+          "==",
+          "scale",
+          "3"
+        ]
+      ],
+      "minzoom": 0
+    },
+    {
+      "id": "mtb_s2",
+      "type": "line",
+      "source": "mtb",
+      "source-layer": "mtb_scale",
+      "paint": {
+        "line-color": "rgba(255, 45, 45, 1)",
+        "line-width": {
+          "stops": [
+            [
+              8,
+              3
+            ],
+            [
+              12,
+              5
+            ],
+            [
+              14,
+              10
+            ]
+          ]
+        },
+        "line-opacity": 0.3
+      },
+      "filter": [
+        "all",
+        [
+          "==",
+          "scale",
+          "2"
+        ]
+      ],
+      "minzoom": 0
+    },
+    {
+      "id": "mtb_s1",
+      "type": "line",
+      "source": "mtb",
+      "source-layer": "mtb_scale",
+      "paint": {
+        "line-color": "rgba(106, 232, 252, 1)",
+        "line-width": {
+          "stops": [
+            [
+              8,
+              3
+            ],
+            [
+              12,
+              5
+            ],
+            [
+              14,
+              10
+            ]
+          ]
+        },
+        "line-opacity": 0.3
+      },
+      "filter": [
+        "all",
+        [
+          "==",
+          "scale",
+          "1"
+        ]
+      ],
+      "minzoom": 0
+    },
+    {
+      "id": "mtb_s0",
+      "type": "line",
+      "source": "mtb",
+      "source-layer": "mtb_scale",
+      "paint": {
+        "line-color": "rgba(58, 244, 48, 1)",
+        "line-width": {
+          "stops": [
+            [
+              8,
+              3
+            ],
+            [
+              12,
+              5
+            ],
+            [
+              14,
+              10
+            ]
+          ]
+        },
+        "line-opacity": 0.3
+      },
+      "filter": [
+        "all",
+        [
+          "==",
+          "scale",
+          "0"
+        ]
+      ],
+      "minzoom": 8
+    },
+    {
+      "id": "mtb_label",
+      "type": "symbol",
+      "source": "mtb",
+      "source-layer": "mtb_scale",
+      "layout": {
+        "symbol-placement": "line",
+        "text-field": "{name} S{scale}",
+        "visibility": "visible",
+        "text-font": [
+          "Open Sans Regular"
+        ],
+        "text-size": 10,
+        "symbol-spacing": 150
+      },
+      "minzoom": 13
     },
     {
       "id": "aeroway",
