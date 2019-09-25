@@ -1377,6 +1377,47 @@
       }
     },
     {
+      "id": "road_label",
+      "type": "symbol",
+      "source": "europe",
+      "source-layer": "road",
+      "layout": {
+        "symbol-placement": "line",
+        "text-field": "{name}",
+        "text-font": [
+          "Open Sans Regular"
+        ],
+        "text-size": {
+          "stops": [
+            [
+              13,
+              12
+            ],
+            [
+              14,
+              13
+            ]
+          ]
+        },
+        "visibility": "visible"
+      },
+      "minzoom": 15,
+      "paint": {
+        "text-halo-width": 1,
+        "text-halo-blur": 0.5,
+        "text-color": "rgba(0, 0, 0, 1)",
+        "text-halo-color": "rgba(255, 255, 255, 1)"
+      },
+      "filter": [
+        "all",
+        [
+          "!=",
+          "type",
+          "piste"
+        ]
+      ]
+    },
+    {
       "id": "bridge_minor_rail_casing",
       "type": "line",
       "source": "europe",
@@ -2296,47 +2337,6 @@
         },
         "line-color": "rgba(235, 171, 86, 1)"
       }
-    },
-    {
-      "id": "road_label",
-      "type": "symbol",
-      "source": "europe",
-      "source-layer": "road",
-      "layout": {
-        "symbol-placement": "line",
-        "text-field": "{name}",
-        "text-font": [
-          "Open Sans Regular"
-        ],
-        "text-size": {
-          "stops": [
-            [
-              13,
-              12
-            ],
-            [
-              14,
-              13
-            ]
-          ]
-        },
-        "visibility": "visible"
-      },
-      "minzoom": 13,
-      "paint": {
-        "text-halo-width": 1,
-        "text-halo-blur": 0.5,
-        "text-color": "rgba(0, 0, 0, 1)",
-        "text-halo-color": "rgba(255, 255, 255, 1)"
-      },
-      "filter": [
-        "all",
-        [
-          "!=",
-          "type",
-          "piste"
-        ]
-      ]
     },
     {
       "id": "natural_label_peaks",
