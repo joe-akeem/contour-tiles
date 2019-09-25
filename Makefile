@@ -1,6 +1,7 @@
 DB_HOST := localhost
-DB_PORT := 5432
-DB_USER := osm
+DB_PORT := 25432
+DB_USER := docker
+DB_PWD := docker
 DB_DATABASE := gis
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -15,7 +16,10 @@ mtb: data/mbtiles/mtb.mbtiles
 
 contour: data/mbtiles/hillshade.mbtiles data/mbtiles/slope.mbtiles data/mbtiles/contour.mbtiles
 
-shp2pgsql-osm: data/download/switzerland.osm.pbf data/download/oberbayern.osm.pbf
+load-europe: data/download/europe.osm.pbf
+	osm2pgsql --create --slim --host $(DB_HOST) --port $(DB_PORT) --username $(DB_USER) --password $(DB_PWD) --database $(DB_DATABASE) --hstore-column mtb data/download/europe.osm.pbf
+
+load-switzerland: data/download/switzerland.osm.pbf data/download/oberbayern.osm.pbf
 	osm2pgsql --create --slim --host $(DB_HOST) --port $(DB_PORT) --username $(DB_USER) --database $(DB_DATABASE) --hstore-column mtb data/download/switzerland.osm.pbf
 	osm2pgsql --append --slim --host $(DB_HOST) --port $(DB_PORT) --username $(DB_USER) --database $(DB_DATABASE) --hstore-column mtb data/download/oberbayern.osm.pbf
 
@@ -237,3 +241,7 @@ data/download/oberbayern.osm.pbf:
 	mkdir -p data/download
 	curl https://download.geofabrik.de/europe/germany/bayern/oberbayern-latest.osm.pbf --output data/download/oberbayern.osm.pbf
 	touch $@
+
+data/download/europe.osm.pbf:
+	mkdir -p data/download
+	wget https://download.geofabrik.de/europe-latest.osm.pbf -O data/download/europe.osm.pbf
