@@ -35,6 +35,13 @@ RUN make install
 # cleanup
 RUN rm -rf /tmp/osm2pgsql /tmp/tippecanoe
 
+# tileserver documentation
+RUN apt-get install -y python-pip python-sphinx
+RUN pip install sphinx_bootstrap_theme sphinx_rtd_theme sphinx_fontawesome
+COPY docs /docs
+RUN cd /docs && make html && cp -R build/html/* /usr/share/nginx/html
+
+COPY /conf /conf
 COPY Makefile /tileserver/Makefile
 COPY sql /sql
 

@@ -1,12 +1,3 @@
-GDAL=osgeo/gdal:alpine-normal-latest
-OSM2PSQL=docker run -i -t --rm --link postgres-osm:pg -v $$(pwd):/osm openfirmware/osm2pgsql -c
-GDAL_MERGE=docker run -i -t --rm -v $$(pwd):/osm geodata/gdal gdal_merge.py
-GDALWARP=docker run -i -t --rm -v $$(pwd):/osm $(GDAL) gdalwarp
-GDALDEM=docker run -i -t --rm -v $$(pwd):/osm $(GDAL) gdaldem
-GDAL_CONTOUR=docker run -i -t --rm -v $$(pwd):/osm $(GDAL) gdal_contour
-SHP2PGSQL=docker run -i -t --rm -v $$(pwd):/osm joeakeem/osmtools:1.0 shp2pgsql
-PSQL=docker run -i --rm --link postgres-osm:pg --entrypoint /bin/bash postgres:9.3.5 -c 'psql -h $$PG_PORT_5432_TCP_ADDR -p $$PG_PORT_5432_TCP_PORT -d gis -U postgres postgres'
-
 # ----------------------------------------------------------------------------------------------------------------------
 #	Main Targets
 # ----------------------------------------------------------------------------------------------------------------------
@@ -14,13 +5,13 @@ PSQL=docker run -i --rm --link postgres-osm:pg --entrypoint /bin/bash postgres:9
 usage:
 	@echo "make all|europe|mtb|contour|load-europe|load-switzerland|shp2pgsql-contour"
 
-all: shp2pgsql-osm shp2pgsql-contour contour mtb europe
+all: contour mtb europe
 
 europe: /data/mbtiles/europe.mbtiles
 
 mtb: /data/mbtiles/mtb.mbtiles
 
-contour: /data/mbtiles/hillshade.mbtiles /data/mbtiles/slope.mbtiles /data/mbtiles/contour.mbtiles
+contour: /data/mbtiles/hillshade.mbtiles /data/mbtiles/slope.mbtiles /data/mbtiles/contour.mbtiles /data/mbtiles/OSloOVERLAY_LR_Alps_16.mbtiles
 
 load-europe: /data/download/europe.osm.pbf
 	osm2pgsql --create --slim --cache 2000 --host $$PG_PORT_5432_TCP_ADDR --port $$PG_PORT_5432_TCP_PORT --username osm --database gis --hstore-column mtb /osm/data/download/europe.osm.pbf
@@ -29,64 +20,66 @@ load-switzerland: /data/download/switzerland.osm.pbf
 	osm2pgsql --create --slim --host $$PG_PORT_5432_TCP_ADDR --port $$PG_PORT_5432_TCP_PORT --username osm --database gis --hstore-column mtb /data/download/switzerland.osm.pbf
 
 shp2pgsql-contour: /data/tif/contour-3785-20m.tif
-	mkdir -p /data/sql
 	/bin/bash -c 'shp2pgsql -s 3857 /data/tif/contour-3785-20m.tif/contour.shp contourlines | psql -h $$PG_PORT_5432_TCP_ADDR -p $$PG_PORT_5432_TCP_PORT -d gis -U osm'
 
 # ----------------------------------------------------------------------------------------------------------------------
 #	Building mbtiles
 # ----------------------------------------------------------------------------------------------------------------------
 
-data/mbtiles/europe.mbtiles: data/geojson/landuse.geojson data/geojson/landuse_overlay.geojson data/geojson/admin.geojson data/geojson/building.geojson data/geojson/road.geojson data/geojson/waterway.geojson data/geojson/water.geojson data/geojson/natural_label.geojson data/geojson/place_label.geojson data/geojson/poi_label.geojson data/geojson/aeroway.geojson data/geojson/airport_label.geojson
-	mkdir -p data/mbtiles
-	tippecanoe -f -o data/mbtiles/europe.mbtiles --drop-densest-as-needed data/geojson/landuse.geojson data/geojson/landuse_overlay.geojson data/geojson/admin.geojson data/geojson/building.geojson data/geojson/road.geojson data/geojson/waterway.geojson data/geojson/water.geojson data/geojson/natural_label.geojson data/geojson/place_label.geojson data/geojson/poi_label.geojson data/geojson/aeroway.geojson data/geojson/airport_label.geojson
+/data/mbtiles/europe.mbtiles: /data/geojson/landuse.geojson /data/geojson/landuse_overlay.geojson /data/geojson/admin.geojson /data/geojson/building.geojson /data/geojson/road.geojson /data/geojson/waterway.geojson /data/geojson/water.geojson /data/geojson/natural_label.geojson /data/geojson/place_label.geojson /data/geojson/poi_label.geojson /data/geojson/aeroway.geojson /data/geojson/airport_label.geojson
+	mkdir -p /data/mbtiles
+	tippecanoe -f -o /data/mbtiles/europe.mbtiles --drop-densest-as-needed /data/geojson/landuse.geojson /data/geojson/landuse_overlay.geojson /data/geojson/admin.geojson /data/geojson/building.geojson /data/geojson/road.geojson /data/geojson/waterway.geojson /data/geojson/water.geojson /data/geojson/natural_label.geojson /data/geojson/place_label.geojson /data/geojson/poi_label.geojson /data/geojson/aeroway.geojson /data/geojson/airport_label.geojson
 
 /data/mbtiles/mtb.mbtiles: /data/geojson/mtb.geojson
 	mkdir -p /data/mbtiles
 	tippecanoe -f -o /data/mbtiles/mtb.mbtiles /data/geojson/mtb.geojson
 
-/data/mbtiles/contour.mbtiles: data/geojson/contour.geojson
+/data/mbtiles/contour.mbtiles: /data/geojson/contour.geojson
 	mkdir -p /data/mbtiles
 	tippecanoe -f -o /data/mbtiles/contour.mbtiles /data/geojson/contour.geojson
 
-data/mbtiles/hillshade.mbtiles: data/tif/hillshade.tif
-	mkdir -p data/mbtiles
-	gdal_translate data/hillshade.tif data/mbtiles/hillshade.mbtiles -of MBTILES
-	gdaladdo -r nearest hillshade.mbtiles 2 4 8 16
+/data/mbtiles/hillshade.mbtiles: /data/tif/hillshade.tif
+	mkdir -p /data/mbtiles
+	gdal_translate /data/tif/hillshade.tif /data/mbtiles/hillshade.mbtiles -of MBTILES
+	gdaladdo -r nearest /data/mbtiles/hillshade.mbtiles 2 4 8 16
 
-data/mbtiles/slope.mbtiles: data/tif/slope.tif
-	mkdir -p data/mbtiles
-	gdal_translate data/slope.tif data/mbtiles/slope.mbtiles -of MBTILES
-	gdaladdo -r nearest slope.mbtiles 2 4 8 16
+/data/mbtiles/slope.mbtiles: /data/tif/slope.tif
+	mkdir -p /data/mbtiles
+	gdal_translate /data/tif/slope.tif /data/mbtiles/slope.mbtiles -of MBTILES
+	gdaladdo -r nearest /data/mbtiles/slope.mbtiles 2 4 8 16
+
+/data/mbtiles/OSloOVERLAY_LR_Alps_16.mbtiles:
+	curl https://download.openslopemap.org/mbtiles/OSloOVERLAY_LR_Alps_16.mbtiles --output /data/mbtiles/OSloOVERLAY_LR_Alps_16.mbtiles
 
 # ----------------------------------------------------------------------------------------------------------------------
 #	Building geojson
 # ----------------------------------------------------------------------------------------------------------------------
 
-data/geojson/landuse.geojson: sql/landuse.sql
-	mkdir -p data/geojson
-	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/landuse.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/landuse.sql
-	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 5 },/g' data/geojson/landuse.geojson
+/data/geojson/landuse.geojson: /sql/landuse.sql
+	mkdir -p /data/geojson
+	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 /data/geojson/landuse.geojson "PG:host=$$PG_PORT_5432_TCP_ADDR port=$$PG_PORT_5432_TCP_PORT dbname=gis user=osm" -sql @/sql/landuse.sql
+	sed -i 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 5 },/g' /data/geojson/landuse.geojson
 
-data/geojson/landuse_overlay.geojson: sql/landuse_overlay.sql
-	mkdir -p data/geojson
-	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/landuse_overlay.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/landuse_overlay.sql
-	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 5 },/g' data/geojson/landuse_overlay.geojson
+/data/geojson/landuse_overlay.geojson: /sql/landuse_overlay.sql
+	mkdir -p /data/geojson
+	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 /data/geojson/landuse_overlay.geojson "PG:host=$$PG_PORT_5432_TCP_ADDR port=$$PG_PORT_5432_TCP_PORT dbname=gis user=osm" -sql @/sql/landuse_overlay.sql
+	sed -i 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 5 },/g' /data/geojson/landuse_overlay.geojson
 
-data/geojson/admin.geojson: sql/admin.sql
-	mkdir -p data/geojson
-	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/admin.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/admin.sql
-	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 0 },/g' data/geojson/admin.geojson
+/data/geojson/admin.geojson: /sql/admin.sql
+	mkdir -p /data/geojson
+	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 /data/geojson/admin.geojson "PG:host=$$PG_PORT_5432_TCP_ADDR port=$$PG_PORT_5432_TCP_PORT dbname=gis user=osm" -sql @/sql/admin.sql
+	sed -i 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 0 },/g' /data/geojson/admin.geojson
 
-data/geojson/building.geojson: sql/building.sql
-	mkdir -p data/geojson
-	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/building.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/building.sql
-	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 13 },/g' data/geojson/building.geojson
+/data/geojson/building.geojson: /sql/building.sql
+	mkdir -p /data/geojson
+	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 /data/geojson/building.geojson "PG:host=$$PG_PORT_5432_TCP_ADDR port=$$PG_PORT_5432_TCP_PORT dbname=gis user=osm" -sql @/sql/building.sql
+	sed -i 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 13 },/g' /data/geojson/building.geojson
 
-data/geojson/road.geojson: data/geojson/minor_road.geojson sql/major_road.sql
-	mkdir -p data/geojson
-	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/road.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/major_road.sql
-	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 5 },/g' data/geojson/road.geojson
-	ogr2ogr -f GeoJSON -append data/geojson/road.geojson data/geojson/minor_road.geojson
+/data/geojson/road.geojson: /data/geojson/minor_road.geojson /sql/major_road.sql
+	mkdir -p /data/geojson
+	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 /data/geojson/road.geojson "PG:host=$$PG_PORT_5432_TCP_ADDR port=$$PG_PORT_5432_TCP_PORT dbname=gis user=osm" -sql @/sql/major_road.sql
+	sed -i 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 5 },/g' /data/geojson/road.geojson
+	ogr2ogr -f GeoJSON -append /data/geojson/road.geojson /data/geojson/minor_road.geojson
 
 /data/geojson/minor_road.geojson: /sql/minor_road.sql
 	mkdir -p /data/geojson
@@ -131,13 +124,13 @@ data/geojson/road.geojson: data/geojson/minor_road.geojson sql/major_road.sql
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 /data/geojson/mtb.geojson "PG:host=$$PG_PORT_5432_TCP_ADDR port=$$PG_PORT_5432_TCP_PORT dbname=gis user=osm" -sql @/sql/mtb.sql
 	sed -i 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 8 },/g' /data/geojson/mtb.geojson
 
-data/geojson/contour.geojson: data/geojson/contour20.geojson data/geojson/contour100.geojson data/geojson/glacier_contour20.geojson data/geojson/glacier_contour100.geojson data/geojson/rock_contour20.geojson data/geojson/rock_contour100.geojson
-	ogr2ogr -f GeoJSON data/geojson/contour.geojson data/geojson/contour20.geojson
-	ogr2ogr -f GeoJSON -append data/geojson/contour.geojson data/geojson/contour100.geojson
-	ogr2ogr -f GeoJSON -append data/geojson/contour.geojson data/geojson/glacier_contour20.geojson
-	ogr2ogr -f GeoJSON -append data/geojson/contour.geojson data/geojson/glacier_contour100.geojson
-	ogr2ogr -f GeoJSON -append data/geojson/contour.geojson data/geojson/rock_contour20.geojson
-	ogr2ogr -f GeoJSON -append data/geojson/contour.geojson data/geojson/rock_contour100.geojson
+/data/geojson/contour.geojson: /data/geojson/contour20.geojson /data/geojson/contour100.geojson /data/geojson/glacier_contour20.geojson /data/geojson/glacier_contour100.geojson /data/geojson/rock_contour100.geojson #/data/geojson/rock_contour20.geojson
+	ogr2ogr -f GeoJSON /data/geojson/contour.geojson /data/geojson/contour20.geojson
+	ogr2ogr -f GeoJSON -append /data/geojson/contour.geojson /data/geojson/contour100.geojson
+	ogr2ogr -f GeoJSON -append /data/geojson/contour.geojson /data/geojson/glacier_contour20.geojson
+	ogr2ogr -f GeoJSON -append /data/geojson/contour.geojson /data/geojson/glacier_contour100.geojson
+	#ogr2ogr -f GeoJSON -append /data/geojson/contour.geojson /data/geojson/rock_contour20.geojson
+	ogr2ogr -f GeoJSON -append /data/geojson/contour.geojson /data/geojson/rock_contour100.geojson
 
 /data/geojson/contour20.geojson: /sql/contour20.sql
 	mkdir -p /data/geojson
@@ -161,8 +154,8 @@ data/geojson/contour.geojson: data/geojson/contour20.geojson data/geojson/contou
 
 /data/geojson/rock_contour20.geojson: /sql/rock_contour20.sql
 	mkdir -p /data/geojson
-	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 /data/geojson/rock_contour20.geojson "PG:host=$$PG_PORT_5432_TCP_ADDR port=$$PG_PORT_5432_TCP_PORT dbname=gis user=osm" -sql @/sql/rock_contour20.sql
-	sed -i 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 13 },/g' /data/geojson/rock_contour20.geojson
+	#ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 /data/geojson/rock_contour20.geojson "PG:host=$$PG_PORT_5432_TCP_ADDR port=$$PG_PORT_5432_TCP_PORT dbname=gis user=osm" -sql @/sql/rock_contour20.sql
+	#sed -i 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 13 },/g' /data/geojson/rock_contour20.geojson
 
 /data/geojson/rock_contour100.geojson: /sql/rock_contour100.sql
 	mkdir -p /data/geojson
@@ -193,6 +186,7 @@ data/geojson/contour.geojson: data/geojson/contour20.geojson data/geojson/contou
 	mkdir -p /data/geojson
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 /data/geojson/airport_label.geojson "PG:host=$$PG_PORT_5432_TCP_ADDR port=$$PG_PORT_5432_TCP_PORT dbname=gis user=osm" -sql @/sql/airport_label.sql
 	sed -i 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 9 },/g' /data/geojson/airport_label.geojson
+
 # ----------------------------------------------------------------------------------------------------------------------
 #	Building tifs
 # ----------------------------------------------------------------------------------------------------------------------

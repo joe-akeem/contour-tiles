@@ -1,0 +1,32 @@
+version: '3'
+services:
+  tilesbuilder:
+    build: .
+    links:
+      - postgres-osm:db
+    depends_on:
+      - postgres-osm
+
+  tileserver:
+    image: "klokantech/tileserver-gl"
+    volumes:
+      - ~/osm:/data
+      - ./conf:/conf
+      - ./styles:/styles
+    command: -c /conf/config.json
+    ports:
+      - "8080:80"
+    depends_on:
+      - "tilesbuilder"
+
+  docs:
+    image: "nginx"
+    #volumes:
+    #  - ./docs
+    ports:
+      - 9090:80
+
+  postgres-osm:
+    image: "openfirmware/postgres-osm"
+    #ports:
+    #  - 25432:5432
