@@ -3,7 +3,10 @@ services:
   tilesbuilder:
     build: .
     links:
-      - postgres-osm:db
+      - postgres-osm:pg
+    volumes:
+      - ~/osm:/data
+      - ./docs:/docs
     depends_on:
       - postgres-osm
 
@@ -21,12 +24,22 @@ services:
 
   docs:
     image: "nginx"
-    #volumes:
-    #  - ./docs
+    volumes:
+      - ./docs/build/html:/usr/share/nginx/html
     ports:
       - 9090:80
+    depends_on:
+      - "tilesbuilder"
 
   postgres-osm:
     image: "openfirmware/postgres-osm"
-    #ports:
-    #  - 25432:5432
+    ports:
+      - 25432:5432
+
+  maputnik:
+    image: "maputnik/editor"
+    volumes:
+      - ./styles:/styles
+    #command: maputnik --watch --file /styles/basic.json
+    ports:
+      - 8888:8888

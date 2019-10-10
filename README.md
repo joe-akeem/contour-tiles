@@ -1,116 +1,31 @@
 # Singletrailmap Tileserver
 
-#Building and deploying the tileserver docker image
+
+#Building 
 ```bash
-docker build -t joeakeem/tileserver:latest .
-docker push joeakeem/tileserver:latest
+git clone https://github.com/joe-akeem/tileserver.git
+cd tileserver
+docker-compose build
 ```
 
-#Running PostGIS
+#Running
 
-Run PostGIS in a new container on port 25432
+Run 
 ```bash
-# OLD docker run --name osmdb -e POSTGRES_USER=osm -e POSTGRES_PASS=osm -e POSTGRES_DBNAME=gis -e POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore -p 25432:5432 -d -t kartoza/postgis
-docker run -d --name postgres-osm -p 25432:5432 openfirmware/postgres-osm
+mkdir ~/osm
+docker-compose up
 ``` 
 
-Stopping and starting PostGIS once the container has been created as shown above:
-```bash
-docker container stop postgres-osm
-docker container start postgres-osm
-```
+When running for the first time the mbtiles files will be missing and need to be generated before the tileserver
+can be started. Generating them can take a looooong time!
 
-# Loading PostGIS with data
+Once all services have been started successfully the tileserver can be accessed at http://localhost:8080
 
-Internally `make` is used to download OSM data, load it into the database and generate vector tiles from it.
-To see the various targets that are supported run
-```bash
-docker run -it --rm joeakeem/tileserver:latest make
-```
+The documentation of the mbtiles content can be accessed at http://localhost:9090
 
-Precondition for loading data into the PostGIS database is that the database was started with the docker command above.
+The output (mbtiles files) are generated to the ~/osm directory.
 
-To load the data for Switzerland only run:
-```bash
-docker run -it --rm --link postgres-osm:pg  -v ~/osm/:/data joeakeem/tileserver:latest make load-switzerland
-```
-Note that the directory ~/osm/ must exist. This is where the data  will be created.
-
-To load data for the whole of Europe run:
-```bash
-docker run -it --rm --link postgres-osm:pg  -v ~/osm/:/data joeakeem/tileserver:latest make load-europe
-```
-
-Loading contour data into the database:
-```bash
-docker run -it --rm --link postgres-osm:pg  -v ~/osm/:/data joeakeem/tileserver:latest make shp2pgsql-contour
-```
-
-Note that each time one of the above commands are run, the existing data is deleted from the database and reloaded from scratch.
-In order to download "fresh" data the files in ./data/download need to be deleted so `make` will pull the files anew.
-
-# Building the tiles
-
-To build all tiles run
-```bash
-docker run -it --rm --link postgres-osm:pg  -v ~/osm/:/data joeakeem/tileserver:latest make all
-```
-
-To build e.g. just the vector tiles for europe run
-```bash
-docker run -it --rm --link postgres-osm:pg  -v ~/osm/:/data joeakeem/tileserver:latest make europe
-```
-
-To build the contour lines, hillshade and slope vector tiles run
-```bash
-docker run -it --rm --link postgres-osm:pg  -v ~/osm/:/data joeakeem/tileserver:latest make contour
-```
-
-To build the mountbike singletrail vector tiles run
-```bash
-docker run -it --rm --link postgres-osm:pg  -v ~/osm/:/data joeakeem/tileserver:latest make mtb
-```
-
-The output (mbtiles files) is generated to the ~/osm directory (or to the one you mounted to /data with the docker command above).
-
-# Running the tileserver
-
-Run tileserver in a new container
-```
-$ docker run --name tileserver -itd -v $(pwd):/data -p 8080:80 klokantech/tileserver-gl -c conf/config.json
-```
-
-Stopping and starting the tileserver once the container has been created
-```
-$ docker container stop tileserver
-$ docker container start tileserver
-```
-
-# Running Maputnik to style the maps
-
-~/Downloads/maputnik --watch --file styles/basic.json
-
-# Building the tiles documentation
-
-```
-$ cd docs
-$ make html
-$ docker build -t joeakeem/tileserver-docs .
-$ docker push joeakeem/tileserver-docs
-```
-# Running nginx to serve the documentation
-
-Run tileserver-docs in a new container
-```
-$ docker pull joeakeem/tileserver-docs
-$ docker run --name tileserver-docs -d -p 9090:80 joeakeem/tileserver-docs
-```
-
-Stopping and starting the tileserver-docs once the container has been created
-```
-$ docker container stop tileserver-docs
-$ docker container start tileserver-docs
-```
+The Maputnik style editor can be accessed at http://localhost:8888
 
 # Running the reverse proxy
 
