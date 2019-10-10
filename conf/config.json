@@ -3,7 +3,7 @@
     "paths": {
       "root": ".",
       "styles": "../styles",
-      "mbtiles": "../data/mbtiles"
+      "mbtiles": "~/osm/data/mbtiles"
     }
   },
   "styles": {

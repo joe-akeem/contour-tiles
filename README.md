@@ -1,5 +1,11 @@
 # Singletrailmap Tileserver
 
+#Building and deploying the tileserver docker image
+```bash
+docker build -t joeakeem/tileserver:latest .
+docker push joeakeem/tileserver:latest
+```
+
 #Running PostGIS
 
 Run PostGIS in a new container on port 25432
@@ -35,27 +41,37 @@ To load data for the whole of Europe run:
 docker run -it --rm --link postgres-osm:pg  -v ~/osm/:/data joeakeem/tileserver:latest make load-europe
 ```
 
+Loading contour data into the database:
+```bash
+docker run -it --rm --link postgres-osm:pg  -v ~/osm/:/data joeakeem/tileserver:latest make shp2pgsql-contour
+```
+
 Note that each time one of the above commands are run, the existing data is deleted from the database and reloaded from scratch.
 In order to download "fresh" data the files in ./data/download need to be deleted so `make` will pull the files anew.
 
-Loading contour data into the database:
-```bash
-make shp2pgsql-contour
-```
-
 # Building the tiles
 
+To build all tiles run
 ```bash
-make all
+docker run -it --rm --link postgres-osm:pg  -v ~/osm/:/data joeakeem/tileserver:latest make all
 ```
 
-To build e.g. just the europe tiles:
-
+To build e.g. just the vector tiles for europe run
+```bash
+docker run -it --rm --link postgres-osm:pg  -v ~/osm/:/data joeakeem/tileserver:latest make europe
 ```
-$ make europe
+
+To build the contour lines, hillshade and slope vector tiles run
+```bash
+docker run -it --rm --link postgres-osm:pg  -v ~/osm/:/data joeakeem/tileserver:latest make contour
 ```
 
-The output is generated to the data/mbtiles directory.
+To build the mountbike singletrail vector tiles run
+```bash
+docker run -it --rm --link postgres-osm:pg  -v ~/osm/:/data joeakeem/tileserver:latest make mtb
+```
+
+The output (mbtiles files) is generated to the ~/osm directory (or to the one you mounted to /data with the docker command above).
 
 # Running the tileserver
 
