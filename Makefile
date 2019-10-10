@@ -1,12 +1,18 @@
-DB_HOST := localhost
-DB_PORT := 25432
-DB_USER := docker
-DB_PWD := docker
-DB_DATABASE := gis
+GDAL=osgeo/gdal:alpine-normal-latest
+OSM2PSQL=docker run -i -t --rm --link postgres-osm:pg -v $$(pwd):/osm openfirmware/osm2pgsql -c
+GDAL_MERGE=docker run -i -t --rm -v $$(pwd):/osm geodata/gdal gdal_merge.py
+GDALWARP=docker run -i -t --rm -v $$(pwd):/osm $(GDAL) gdalwarp
+GDALDEM=docker run -i -t --rm -v $$(pwd):/osm $(GDAL) gdaldem
+GDAL_CONTOUR=docker run -i -t --rm -v $$(pwd):/osm $(GDAL) gdal_contour
+SHP2PGSQL=docker run -i -t --rm -v $$(pwd):/osm joeakeem/osmtools:1.0 shp2pgsql
+PSQL=docker run -i --rm --link postgres-osm:pg --entrypoint /bin/bash postgres:9.3.5 -c 'psql -h $$PG_PORT_5432_TCP_ADDR -p $$PG_PORT_5432_TCP_PORT -d gis -U postgres postgres'
 
 # ----------------------------------------------------------------------------------------------------------------------
 #	Main Targets
 # ----------------------------------------------------------------------------------------------------------------------
+
+usage:
+	@echo "make all|europe|mtb|contour|load-europe|load-switzerland|shp2pgsql-contour"
 
 all: shp2pgsql-osm shp2pgsql-contour contour mtb europe
 
@@ -17,14 +23,14 @@ mtb: data/mbtiles/mtb.mbtiles
 contour: data/mbtiles/hillshade.mbtiles data/mbtiles/slope.mbtiles data/mbtiles/contour.mbtiles
 
 load-europe: data/download/europe.osm.pbf
-	osm2pgsql --create --slim --host $(DB_HOST) --port $(DB_PORT) --username $(DB_USER) --password $(DB_PWD) --database $(DB_DATABASE) --hstore-column mtb data/download/europe.osm.pbf
+	$(OSM2PSQL) 'osm2pgsql --create --slim --cache 2000 --database $$PG_ENV_OSM_DB --username $$PG_ENV_OSM_USER --host pg --port $$PG_PORT_5432_TCP_PORT --hstore-column mtb /osm/data/download/europe.osm.pbf'
 
-load-switzerland: data/download/switzerland.osm.pbf data/download/oberbayern.osm.pbf
-	osm2pgsql --create --slim --host $(DB_HOST) --port $(DB_PORT) --username $(DB_USER) --database $(DB_DATABASE) --hstore-column mtb data/download/switzerland.osm.pbf
-	osm2pgsql --append --slim --host $(DB_HOST) --port $(DB_PORT) --username $(DB_USER) --database $(DB_DATABASE) --hstore-column mtb data/download/oberbayern.osm.pbf
+load-switzerland: /data/download/switzerland.osm.pbf
+	osm2pgsql --create --slim --host $$PG_PORT_5432_TCP_ADDR --port $$PG_PORT_5432_TCP_PORT --username osm --database gis --hstore-column mtb /data/download/switzerland.osm.pbf
 
-shp2pgsql-contour: data/tif/contour-3785-20m.tif
-	shp2pgsql -s 3857 data/tif/contour-3785-20m.tif/contour.shp contourlines | psql -h localhost -d gis -U osm
+shp2pgsql-contour: /data/tif/contour-3785-20m.tif
+	mkdir -p /data/sql
+	/bin/bash -c 'shp2pgsql -s 3857 /data/tif/contour-3785-20m.tif/contour.shp contourlines | psql -h $$PG_PORT_5432_TCP_ADDR -p $$PG_PORT_5432_TCP_PORT -d gis -U osm'
 
 # ----------------------------------------------------------------------------------------------------------------------
 #	Building mbtiles
@@ -183,65 +189,65 @@ data/geojson/aeroway.geojson: sql/aeroway.sql
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/aeroway.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/aeroway.sql
 	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 9 },/g' data/geojson/aeroway.geojson
 
-data/geojson/airport_label.geojson: sql/airport_label.sql
-	mkdir -p data/geojson
-	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 data/geojson/airport_label.geojson "PG:host=localhost dbname=gis user=osm" -sql @sql/airport_label.sql
-	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 9 },/g' data/geojson/airport_label.geojson
+/data/geojson/airport_label.geojson: /sql/airport_label.sql
+	mkdir -p /data/geojson
+	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 /data/geojson/airport_label.geojson "PG:host=$$PG_PORT_5432_TCP_ADDR port=$$PG_PORT_5432_TCP_PORT dbname=gis user=osm" -sql @/sql/airport_label.sql
+	sed -i '' 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 9 },/g' /data/geojson/airport_label.geojson
 # ----------------------------------------------------------------------------------------------------------------------
 #	Building tifs
 # ----------------------------------------------------------------------------------------------------------------------
 
-data/tif/contour-3785-20m.tif: data/tif/contour-3785.tif
-	mkdir -p data/tif
-	gdal_contour -a elev -i 20 data/tif/contour-3785.tif data/tif/contour-3785-20m.tif
+/data/tif/contour-3785-20m.tif: /data/tif/contour-3785.tif
+	mkdir -p /data/tif
+	gdal_contour -a elev -i 20 /data/tif/contour-3785.tif /data/tif/contour-3785-20m.tif
 
-data/tif/slope.tif: data/tif/contour-3785.tif
-	mkdir -p data/tif
-	gdaldem slope data/tif/contour-3785.tif data/tif/slope.tif
+/data/tif/slope.tif: /data/tif/contour-3785.tif
+	mkdir -p /data/tif
+	gdaldem slope /data/tif/contour-3785.tif /data/tif/slope.tif
 
-data/tif/hillshade.tif: data/tif/contour-3785.tif
-	mkdir -p data/tif
-	gdaldem hillshade -z 5 data/tif/contour-3785.tif data/tif/hillshade.tif
+/data/tif/hillshade.tif: /data/tif/contour-3785.tif
+	mkdir -p /data/tif
+	gdaldem hillshade -z 5 /data/tif/contour-3785.tif /data/tif/hillshade.tif
 
-data/tif/contour-3785.tif: data/tif/contour-4326.tif
-	mkdir -p data/tif
-	gdalwarp -s_srs EPSG:4326 -t_srs EPSG:3785 -r bilinear data/tif/contour-4326.tif data/tif/contour-3785.tif
+/data/tif/contour-3785.tif: /data/tif/contour-4326.tif
+	mkdir -p /data/tif
+	gdalwarp -s_srs EPSG:4326 -t_srs EPSG:3785 -r bilinear /data/tif/contour-4326.tif /data/tif/contour-3785.tif
 
-data/tif/contour-4326.tif: data/tif/srtm_38_03.tif data/tif/srtm_39_03.tif
-	gdal_merge.py -o data/tif/contour-4326.tif data/tif/srtm_38_03.tif data/tif/srtm_39_03.tif
+/data/tif/contour-4326.tif: /data/tif/srtm_38_03.tif /data/tif/srtm_39_03.tif
+	gdal_merge.py -o /data/tif/contour-4326.tif /data/tif/srtm_38_03.tif /data/tif/srtm_39_03.tif
 
-data/tif/srtm_38_03.tif: data/download/srtm_38_03.zip
-	mkdir -p data/tif
-	unzip -p data/download/srtm_38_03.zip srtm_38_03.tif > data/tif/srtm_38_03.tif
+/data/tif/srtm_38_03.tif: /data/download/srtm_38_03.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_38_03.zip srtm_38_03.tif > /data/tif/srtm_38_03.tif
 
-data/tif/srtm_39_03.tif: data/download/srtm_39_03.zip
-	mkdir -p data/tif
-	unzip -p data/download/srtm_39_03.zip srtm_39_03.tif > data/tif/srtm_39_03.tif
+/data/tif/srtm_39_03.tif: /data/download/srtm_39_03.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_39_03.zip srtm_39_03.tif > /data/tif/srtm_39_03.tif
 
 # ----------------------------------------------------------------------------------------------------------------------
 #	Downloads
 # ----------------------------------------------------------------------------------------------------------------------
 
-data/download/srtm_38_03.zip:
-	mkdir -p data/download
-	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_38_03.zip -O data/download/srtm_38_03.zip
+/data/download/srtm_38_03.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_38_03.zip -O /data/download/srtm_38_03.zip
 	touch $@
 
-data/download/srtm_39_03.zip:
-	mkdir -p data/download
-	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_39_03.zip -O data/download/srtm_39_03.zip
+/data/download/srtm_39_03.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_39_03.zip -O /data/download/srtm_39_03.zip
 	touch $@
 
-data/download/switzerland.osm.pbf:
-	mkdir -p data/download
-	curl http://download.geofabrik.de/europe/switzerland-latest.osm.pbf --output data/download/switzerland.osm.pbf
+/data/download/switzerland.osm.pbf:
+	mkdir -p /data/download
+	curl http://download.geofabrik.de/europe/switzerland-latest.osm.pbf --output /data/download/switzerland.osm.pbf
 	touch $@
 
-data/download/oberbayern.osm.pbf:
-	mkdir -p data/download
-	curl https://download.geofabrik.de/europe/germany/bayern/oberbayern-latest.osm.pbf --output data/download/oberbayern.osm.pbf
+/data/download/oberbayern.osm.pbf:
+	mkdir -p /data/download
+	curl https://download.geofabrik.de/europe/germany/bayern/oberbayern-latest.osm.pbf --output /data/download/oberbayern.osm.pbf
 	touch $@
 
-data/download/europe.osm.pbf:
-	mkdir -p data/download
-	wget https://download.geofabrik.de/europe-latest.osm.pbf -O data/download/europe.osm.pbf
+/data/download/europe.osm.pbf:
+	mkdir -p /data/download
+	wget https://download.geofabrik.de/europe-latest.osm.pbf -O /data/download/europe.osm.pbf
