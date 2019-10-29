@@ -1,0 +1,18 @@
+version: '3'
+services:
+  tileserver:
+    build: .
+    volumes:
+      - ~/osm:/data
+    #command: --verbose
+    #command: "-c /conf/config.json"
+    #entrypoint: "/bin/bash"
+    ports:
+      - "8080:80"
+
+  maputnik:
+    build: .
+    entrypoint: /maputnik/maputnik_linux
+    command: --watch --file /styles/basic.json
+    ports:
+      - 9000:8000

@@ -1,5 +1,35 @@
 # Singletrailmap Tileserver
 
+#Getting the code
+```bash
+git clone https://github.com/joe-akeem/tileserver.git
+```
+
+#Creating the vector tiles
+```bash
+mkdir ~/osm
+cd tileserver/tiles-builder
+docker-compose build
+docker-compose up
+```
+
+This will the tilesbuilder docker image, start the PostGIS database, import OSM data and generate the mbiles files.
+
+All data (downloads, intermediate files and final mbtiles files) will be created in the folder ~/osm
+
+Once the mbtiles are generated all services can be stopped:
+```bash
+docker-compose down
+```
+
+#Starting the tileserver
+```bash
+mkdir ~/osm
+cd tileserver/tiles-server
+docker-compose build
+docker-compose up
+```
+
 
 #Building 
 ```bash

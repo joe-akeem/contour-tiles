@@ -6,7 +6,9 @@ services:
       - postgres-osm:pg
     volumes:
       - ~/osm:/data
-      - ./docs:/docs
+      - ~/osm/conf:/conf
+      - ~/osm/styles:/styles
+      - docs-volume:/usr/share/nginx/html
     depends_on:
       - postgres-osm
 
@@ -14,8 +16,8 @@ services:
     image: "klokantech/tileserver-gl"
     volumes:
       - ~/osm:/data
-      - ./conf:/conf
-      - ./styles:/styles
+      - ~/osm/conf:/conf
+      - ~/osm/styles:/styles
     command: -c /conf/config.json
     ports:
       - "8080:80"
@@ -23,13 +25,9 @@ services:
       - "tilesbuilder"
 
   docs:
-    image: "nginx"
-    volumes:
-      - ./docs/build/html:/usr/share/nginx/html
+    build: ./docs
     ports:
       - 9090:80
-    depends_on:
-      - "tilesbuilder"
 
   postgres-osm:
     image: "openfirmware/postgres-osm"
@@ -37,9 +35,13 @@ services:
       - 25432:5432
 
   maputnik:
-    image: "maputnik/editor"
+    build: .
     volumes:
-      - ./styles:/styles
-    #command: maputnik --watch --file /styles/basic.json
+      - ~/osm/styles:/styles
+    entrypoint: /maputnik/maputnik_linux
+    command: --watch --file /styles/basic.json
     ports:
-      - 8888:8888
+      - 9000:8000
+
+volumes:
+  docs-volume:

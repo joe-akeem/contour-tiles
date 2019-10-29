@@ -1,5 +1,3 @@
-#FROM ubuntu:bionic
-#FROM osgeo/gdal:alpine-normal-latest
 FROM osgeo/gdal:ubuntu-full-latest
 
 MAINTAINER joeakeem "j.lengacher@gmx.net"
@@ -38,12 +36,23 @@ RUN rm -rf /tmp/osm2pgsql /tmp/tippecanoe
 # tileserver documentation
 RUN apt-get install -y python-pip python-sphinx
 RUN pip install sphinx_bootstrap_theme sphinx_rtd_theme sphinx_fontawesome
+RUN apt-get install wget
 
-COPY /conf /conf
+RUN apt-get install -y software-properties-common
+RUN add-apt-repository ppa:ubuntugis/ppa
+RUN apt-get install -y python-gdal gdal-bin
+
+COPY ../conf /conf
 COPY Makefile /tileserver/Makefile
 COPY sql /sql
+COPY ../docs /docs/
+RUN cd /docs && make html && cp -R build/html /usr/share/nginx/html
+
+# maputnik
+RUN mkdir /maputnik && curl -L https://github.com/maputnik/editor/releases/download/v1.5.0/maputnik_linux --output /maputnik/maputnik_linux && chmod a+x /maputnik/maputnik_linux
 
 WORKDIR /tileserver
 
 ENTRYPOINT ["/usr/bin/make"]
+#ENTRYPOINT ["/bin/bash", "-c"]
 CMD ["all"]
