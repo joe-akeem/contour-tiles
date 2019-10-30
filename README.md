@@ -5,57 +5,44 @@
 git clone https://github.com/joe-akeem/tileserver.git
 ```
 
+#Building & pushing the docker images
+```bash
+cd tileserver
+./build.sh
+```
+
+This will call docker build for all sub projects and push the newly build images to dockerhub.
+
 #Creating the vector tiles
 ```bash
 mkdir ~/osm
-cd tileserver/tiles-builder
-docker-compose build
-docker-compose up
+docker-compose -f docker-compose-builder.yml up
 ```
 
-This will the tilesbuilder docker image, start the PostGIS database, import OSM data and generate the mbiles files.
-
-All data (downloads, intermediate files and final mbtiles files) will be created in the folder ~/osm
+This will start the PostGIS database, import OSM data and generate the mbiles files. All data (downloads,
+intermediate files and final mbtiles files) will be created in the folder `~/osm`.
 
 Once the mbtiles are generated all services can be stopped:
 ```bash
-docker-compose down
+docker-compose -f docker-compose-builder.yml down
 ```
 
 #Starting the tileserver
+The tileserver relies on the mbtiles files tp be present in the folder `~/osm`. If they have been created as described
+above the tiles server can be started as follows: 
+
 ```bash
-mkdir ~/osm
-cd tileserver/tiles-server
-docker-compose build
-docker-compose up
+docker-compose -f docker-compose-server.yml -d up
 ```
 
+This will:
+* start the tiles server at http://localhost:8080
+* start [Maputnik](https://maputnik.github.io/) at http://localhost:9000 (lets you modify the tile server's style sheet on the fly)
+* start nginx at http://localhost:9090 with the tiles documentation.
+   
 
-#Building 
-```bash
-git clone https://github.com/joe-akeem/tileserver.git
-cd tileserver
-docker-compose build
-```
-
-#Running
-
-Run 
-```bash
-mkdir ~/osm
-docker-compose up
-``` 
-
-When running for the first time the mbtiles files will be missing and need to be generated before the tileserver
-can be started. Generating them can take a looooong time!
-
-Once all services have been started successfully the tileserver can be accessed at http://localhost:8080
-
-The documentation of the mbtiles content can be accessed at http://localhost:9090
-
-The output (mbtiles files) are generated to the ~/osm directory.
-
-The Maputnik style editor can be accessed at http://localhost:8888
+------------------------------------------
+TODO: everything below is outdated and needs to be updated once the reverse proxy has been moved into this project!
 
 # Running the reverse proxy
 

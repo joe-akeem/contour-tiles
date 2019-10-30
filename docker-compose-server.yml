@@ -1,7 +1,7 @@
 version: '3'
 services:
   tileserver:
-    build: .
+    image: "joeakeem/tiles-server:latest"
     volumes:
       - ~/osm:/data
     command: "-c /config/config.json"
@@ -9,8 +9,13 @@ services:
       - "8080:80"
 
   maputnik:
-    build: .
+    image: "joeakeem/tiles-server:latest"
     entrypoint: /maputnik/maputnik_linux
     command: --watch --file /styles/basic.json
     ports:
       - 9000:8000
+
+  docs:
+    image: "joeakeem/tiles-doc:latest"
+    ports:
+      - 9090:80
