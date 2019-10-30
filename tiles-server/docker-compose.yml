@@ -4,9 +4,7 @@ services:
     build: .
     volumes:
       - ~/osm:/data
-    #command: --verbose
-    #command: "-c /conf/config.json"
-    #entrypoint: "/bin/bash"
+    command: "-c /config/config.json"
     ports:
       - "8080:80"
 
