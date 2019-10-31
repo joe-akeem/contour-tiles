@@ -5,20 +5,20 @@ services:
     volumes:
       - ~/osm:/data
     command: "-c /config/config.json"
-    ports:
-      - "8080:80"
+    #ports:
+    #  - "8080:80"
 
   maputnik:
     image: "joeakeem/tiles-server:latest"
     entrypoint: /maputnik/maputnik_linux
     command: --watch --file /styles/basic.json
-    ports:
-      - 9000:8000
+    #ports:
+    #  - 9000:8000
 
   docs:
     image: "joeakeem/tiles-doc:latest"
-    ports:
-      - 9090:80
+    #ports:
+    #  - 9090:80
 
   www:
     image: "joeakeem/tiles-proxy:latest"
