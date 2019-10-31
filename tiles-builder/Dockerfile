@@ -45,5 +45,4 @@ WORKDIR /tileserver
 
 # per default run "make all" which will generate all mbtiles files
 ENTRYPOINT ["/usr/bin/make"]
-#ENTRYPOINT ["/bin/bash", "-c"]
 CMD ["all"]

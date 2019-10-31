@@ -19,3 +19,8 @@ services:
     image: "joeakeem/tiles-doc:latest"
     ports:
       - 9090:80
+
+  www:
+    image: "joeakeem/tiles-proxy:latest"
+    ports:
+      - 80:80
