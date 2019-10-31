@@ -1,11 +1,11 @@
 # Singletrailmap Tileserver
 
-#Getting the code
+# Getting the code
 ```bash
 git clone https://github.com/joe-akeem/tileserver.git
 ```
 
-#Building & pushing the docker images
+# Building & pushing the docker images
 ```bash
 cd tileserver
 ./build.sh
@@ -13,7 +13,7 @@ cd tileserver
 
 This will call docker build for all sub projects and push the newly build images to dockerhub.
 
-#Creating the vector tiles
+# Creating the vector tiles
 ```bash
 mkdir ~/osm
 docker-compose -f docker-compose-builder.yml up
@@ -27,7 +27,7 @@ Once the mbtiles are generated all services can be stopped:
 docker-compose -f docker-compose-builder.yml down
 ```
 
-#Starting the tileserver
+# Starting the tileserver
 The tileserver relies on the mbtiles files tp be present in the folder `~/osm`. If they have been created as described
 above the tiles server can be started as follows: 
 
@@ -52,7 +52,7 @@ In order to test this on a local machine add the following entries to your /etc/
 127.0.0.1      maputnik.singletrail-map.eu
 ```   
 
-# Adding users credentials
+# Adding user credentials
 
 The `docs` and `maputnik` services are password protected. The user credentials are saved in the file `tiles-roxy/.htpasswd`.
 
