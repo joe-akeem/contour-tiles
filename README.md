@@ -36,23 +36,34 @@ docker-compose -f docker-compose-server.yml -d up
 ```
 
 This will:
-* start the tiles server at http://localhost:8080
-* start [Maputnik](https://maputnik.github.io/) at http://localhost:9000 (lets you modify the tile server's style sheet on the fly)
-* start nginx at http://localhost:9090 with the tiles documentation.
-   
+* start the tiles server serving vector tiles from the mbtiles files in ~/osm
+* start [Maputnik](https://maputnik.github.io/) (lets you modify the tile server's style sheet on the fly)
+* start nginx with the tiles documentation.
+* start a reverse proxy that listens on port 80 and proxies the above services on the following URLs:
+    * tileserver.singletrail-map.eu
+    * maputnik.singletrail-map.eu
+    * docs.singletrail-map.eu
 
-------------------------------------------
-TODO: everything below is outdated and needs to be updated once the reverse proxy has been moved into this project!
-
-# Running the reverse proxy
-
-Starting the reverse proxy in a new container
+In order to test this on a local machine add the following entries to your /etc/hosts file:
 ```
-$ docker run --name trailmap-nginx -d -p 80:80 joeakeem/trailmap-nginx
+127.0.0.1      singletrail-map.eu
+127.0.0.1      docs.singletrail-map.eu
+127.0.0.1      tileserver.singletrail-map.eu
+127.0.0.1      maputnik.singletrail-map.eu
+```   
+
+# Adding users credentials
+
+The `docs` and `maputnik` services are password protected. The user credentials are saved in the file `tiles-roxy/.htpasswd`.
+
+To create a new credentials file with a new user run
+
+```bash
+htpasswd -c .htpasswd user1
 ```
 
-Stopping and starting the reverse proxy once the container has been created
-```
-$ docker container stop reverse proxy
-$ docker container start reverse proxy
+To add more users to an existing credentials file run
+
+```bash
+htpasswd -c .htpasswd user1
 ```
