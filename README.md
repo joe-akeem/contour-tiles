@@ -16,11 +16,16 @@ This will call docker build for all sub projects and push the newly build images
 # Creating the vector tiles
 ```bash
 mkdir ~/osm
-docker-compose -f docker-compose-builder.yml up
+docker-compose -f docker-compose-builder.yml up -d
 ```
 
 This will start the PostGIS database, import OSM data and generate the mbiles files. All data (downloads,
 intermediate files and final mbtiles files) will be created in the folder `~/osm`.
+
+See what's going on in one of the containers:
+```bash
+docker logs -f dockeruser_tilesbuilder_1
+```
 
 Once the mbtiles are generated all services can be stopped:
 ```bash
