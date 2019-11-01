@@ -95,7 +95,7 @@ contour: /data/mbtiles/hillshade.mbtiles /data/mbtiles/slope.mbtiles /data/mbtil
 	sed -i 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 15 },/g' /data/geojson/waterway_ditch_drain.geojson
 
 /data/geojson/water.geojson: /data/load-europe /data/geojson/water_medium.geojson /data/geojson/water_small.geojson /sql/water_big.sql
-	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 /data/geojson/water.geojson "PG:host=$$PG_PORT_5432_TCP_ADDR port=$$PG_PORT_5432_TCP_PORT dbname=gis user=osm" -sql @/sql/water_big.sql
+	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 /data/geojson/water.geojson "PG:host=$(PG_PORT_5432_TCP_ADDR) port=$(PG_PORT_5432_TCP_PORT) dbname=gis user=osm" -sql @/sql/water_big.sql
 	sed -i 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 0 },/g' /data/geojson/water.geojson
 	ogr2ogr -f GeoJSON -append /data/geojson/water.geojson /data/geojson/water_medium.geojson
 	ogr2ogr -f GeoJSON -append /data/geojson/water.geojson /data/geojson/water_small.geojson
