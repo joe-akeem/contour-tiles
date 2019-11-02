@@ -1,5 +1,4 @@
 FROM osgeo/gdal:ubuntu-full-latest
-
 MAINTAINER joeakeem "j.lengacher@gmx.net"
 
 ENV DEBIAN_FRONTEND=noninteractive
