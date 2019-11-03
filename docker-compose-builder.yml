@@ -1,7 +1,8 @@
 version: '3'
 services:
   tilesbuilder:
-    image: "joeakeem/tiles-builder:latest"
+    build: tiles-builder
+    image: joeakeem/tiles-builder
     links:
       - postgres-osm:pg
     volumes:
@@ -10,8 +11,8 @@ services:
       - postgres-osm
 
   postgres-osm:
-    image: "openfirmware/postgres-osm"
+    image: openfirmware/postgres-osm
     ports:
-      - 25432:5432
+      - 5432:5432
     volumes:
       - ./postgres-data:/var/lib/postgresql/data

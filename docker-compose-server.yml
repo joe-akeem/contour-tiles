@@ -1,26 +1,34 @@
 version: '3'
 services:
   tileserver:
-    image: "joeakeem/tiles-server:latest"
+    build: tiles-server
+    image: joeakeem/tiles-server
     volumes:
       - ~/osm:/data
     command: "-c /config/config.json"
-    #ports:
-    #  - "8080:80"
+    ports:
+      - 8080:80
+    networks:
+      - tileserver-net
 
   maputnik:
-    image: "joeakeem/tiles-server:latest"
+    build: tiles-server
+    image: joeakeem/tiles-server
     entrypoint: /maputnik/maputnik_linux
     command: --watch --file /styles/basic.json
-    #ports:
-    #  - 9000:8000
+    ports:
+      - 9000:8000
+    networks:
+      - tileserver-net
 
   docs:
-    image: "joeakeem/tiles-doc:latest"
-    #ports:
-    #  - 9090:80
-
-  www:
-    image: "joeakeem/tiles-proxy:latest"
+    build: tiles-docs
+    image: joeakeem/tiles-doc
     ports:
-      - 80:80
+      - 9090:80
+    networks:
+      - tileserver-net
+
+networks:
+  tileserver-net:
+    driver: bridge
