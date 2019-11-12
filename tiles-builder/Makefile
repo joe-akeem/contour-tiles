@@ -190,7 +190,8 @@ contour: /data/mbtiles/hillshade.mbtiles /data/mbtiles/slope.mbtiles /data/mbtil
 	touch /data/load-europe
 
 /data/shp2pgsql-contour: /data/tif/contour-3785-20m.shp
-	/bin/bash -c 'shp2pgsql -s 3857 /data/tif/contour-3785-20m.shp contourlines | psql -h $(PG_PORT_5432_TCP_ADDR) -p $(PG_PORT_5432_TCP_PORT) -d gis -U osm'
+	psql -h $(PG_PORT_5432_TCP_ADDR) -p $(PG_PORT_5432_TCP_PORT)  -U osm -d gis -c "DROP TABLE IF EXISTS contourlines;"
+	/bin/bash -c 'shp2pgsql -s 3857 /data/tif/contour-3785-20m.shp contourlines | psql -v ON_ERROR_STOP=ON -h $(PG_PORT_5432_TCP_ADDR) -p $(PG_PORT_5432_TCP_PORT) -d gis -U osm'
 	touch /data/shp2pgsql-contour
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -213,29 +214,346 @@ contour: /data/mbtiles/hillshade.mbtiles /data/mbtiles/slope.mbtiles /data/mbtil
 	mkdir -p /data/tif
 	gdalwarp -s_srs EPSG:4326 -t_srs EPSG:3785 -r bilinear /data/tif/contour-4326.tif /data/tif/contour-3785.tif
 
-/data/tif/contour-4326.tif: /data/tif/srtm_38_03.tif /data/tif/srtm_39_03.tif
-	gdal_merge.py -o /data/tif/contour-4326.tif /data/tif/srtm_38_03.tif /data/tif/srtm_39_03.tif
+/data/tif/contour-4326.tif: /data/tif/srtm_34_02.tif \
+							/data/tif/srtm_35_01.tif \
+							/data/tif/srtm_35_02.tif \
+							/data/tif/srtm_35_03.tif \
+							/data/tif/srtm_35_04.tif \
+							/data/tif/srtm_36_01.tif \
+							/data/tif/srtm_36_02.tif \
+							/data/tif/srtm_36_03.tif \
+							/data/tif/srtm_36_04.tif \
+							/data/tif/srtm_36_05.tif \
+ 							/data/tif/srtm_37_01.tif \
+ 							/data/tif/srtm_37_02.tif \
+ 							/data/tif/srtm_37_03.tif \
+ 							/data/tif/srtm_37_04.tif \
+ 							/data/tif/srtm_37_05.tif \
+ 							/data/tif/srtm_38_01.tif \
+ 							/data/tif/srtm_38_02.tif \
+ 							/data/tif/srtm_38_03.tif \
+ 							/data/tif/srtm_38_04.tif \
+ 							/data/tif/srtm_38_05.tif \
+ 							/data/tif/srtm_39_01.tif \
+ 							/data/tif/srtm_39_02.tif \
+ 							/data/tif/srtm_39_03.tif \
+ 							/data/tif/srtm_39_04.tif \
+ 							/data/tif/srtm_39_05.tif \
+ 							/data/tif/srtm_40_01.tif \
+ 							/data/tif/srtm_40_02.tif \
+ 							/data/tif/srtm_40_03.tif \
+ 							/data/tif/srtm_40_04.tif \
+ 							/data/tif/srtm_40_05.tif
+	gdal_merge.py -o /data/tif/contour-4326.tif \
+					 /data/tif/srtm_34_02.tif \
+					 /data/tif/srtm_35_01.tif \
+					 /data/tif/srtm_35_02.tif \
+					 /data/tif/srtm_35_03.tif \
+					 /data/tif/srtm_35_04.tif \
+					 /data/tif/srtm_36_01.tif \
+					 /data/tif/srtm_36_02.tif \
+					 /data/tif/srtm_36_03.tif \
+					 /data/tif/srtm_36_04.tif \
+					 /data/tif/srtm_36_05.tif \
+					 /data/tif/srtm_37_01.tif \
+					 /data/tif/srtm_37_02.tif \
+					 /data/tif/srtm_37_03.tif \
+					 /data/tif/srtm_37_04.tif \
+					 /data/tif/srtm_37_05.tif \
+					 /data/tif/srtm_38_01.tif \
+					 /data/tif/srtm_38_02.tif \
+					 /data/tif/srtm_38_03.tif \
+					 /data/tif/srtm_38_04.tif \
+					 /data/tif/srtm_38_05.tif \
+					 /data/tif/srtm_39_01.tif \
+					 /data/tif/srtm_39_02.tif \
+					 /data/tif/srtm_39_03.tif \
+					 /data/tif/srtm_39_04.tif \
+					 /data/tif/srtm_39_05.tif \
+					 /data/tif/srtm_40_01.tif \
+					 /data/tif/srtm_40_02.tif \
+					 /data/tif/srtm_40_03.tif \
+					 /data/tif/srtm_40_04.tif \
+					 /data/tif/srtm_40_05.tif
+
+/data/tif/srtm_34_02.tif: /data/download/srtm_34_02.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_34_02.zip srtm_34_02.tif > /data/tif/srtm_34_02.tif
+
+/data/tif/srtm_35_01.tif: /data/download/srtm_35_01.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_35_01.zip srtm_35_01.tif > /data/tif/srtm_35_01.tif
+
+/data/tif/srtm_35_02.tif: /data/download/srtm_35_02.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_35_02.zip srtm_35_02.tif > /data/tif/srtm_35_02.tif
+
+/data/tif/srtm_35_03.tif: /data/download/srtm_35_03.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_35_03.zip srtm_35_03.tif > /data/tif/srtm_35_03.tif
+
+/data/tif/srtm_35_04.tif: /data/download/srtm_35_04.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_35_04.zip srtm_35_04.tif > /data/tif/srtm_35_04.tif
+
+/data/tif/srtm_36_01.tif: /data/download/srtm_36_01.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_36_01.zip srtm_36_01.tif > /data/tif/srtm_36_01.tif
+
+/data/tif/srtm_36_02.tif: /data/download/srtm_36_02.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_36_02.zip srtm_36_02.tif > /data/tif/srtm_36_02.tif
+
+/data/tif/srtm_36_03.tif: /data/download/srtm_36_03.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_36_03.zip srtm_36_03.tif > /data/tif/srtm_36_03.tif
+
+/data/tif/srtm_36_04.tif: /data/download/srtm_36_04.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_36_04.zip srtm_36_04.tif > /data/tif/srtm_36_04.tif
+
+/data/tif/srtm_36_05.tif: /data/download/srtm_36_05.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_36_05.zip srtm_36_05.tif > /data/tif/srtm_36_05.tif
+
+/data/tif/srtm_37_01.tif: /data/download/srtm_37_01.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_37_01.zip srtm_37_01.tif > /data/tif/srtm_37_01.tif
+
+/data/tif/srtm_37_02.tif: /data/download/srtm_37_02.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_37_02.zip srtm_37_02.tif > /data/tif/srtm_37_02.tif
+
+/data/tif/srtm_37_03.tif: /data/download/srtm_37_03.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_37_03.zip srtm_37_03.tif > /data/tif/srtm_37_03.tif
+
+/data/tif/srtm_37_04.tif: /data/download/srtm_37_04.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_37_04.zip srtm_37_04.tif > /data/tif/srtm_37_04.tif
+
+/data/tif/srtm_37_05.tif: /data/download/srtm_37_05.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_37_05.zip srtm_37_05.tif > /data/tif/srtm_37_05.tif
+
+/data/tif/srtm_38_01.tif: /data/download/srtm_38_01.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_38_01.zip srtm_38_01.tif > /data/tif/srtm_38_01.tif
+
+/data/tif/srtm_38_02.tif: /data/download/srtm_38_02.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_38_02.zip srtm_38_02.tif > /data/tif/srtm_38_02.tif
 
 /data/tif/srtm_38_03.tif: /data/download/srtm_38_03.zip
 	mkdir -p /data/tif
 	unzip -p /data/download/srtm_38_03.zip srtm_38_03.tif > /data/tif/srtm_38_03.tif
 
+/data/tif/srtm_38_04.tif: /data/download/srtm_38_04.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_38_04.zip srtm_38_04.tif > /data/tif/srtm_38_04.tif
+
+/data/tif/srtm_38_05.tif: /data/download/srtm_38_05.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_38_05.zip srtm_38_05.tif > /data/tif/srtm_38_05.tif
+
+/data/tif/srtm_39_01.tif: /data/download/srtm_39_01.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_39_01.zip srtm_39_01.tif > /data/tif/srtm_39_01.tif
+
+/data/tif/srtm_39_02.tif: /data/download/srtm_39_02.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_39_02.zip srtm_39_02.tif > /data/tif/srtm_39_02.tif
+
 /data/tif/srtm_39_03.tif: /data/download/srtm_39_03.zip
 	mkdir -p /data/tif
 	unzip -p /data/download/srtm_39_03.zip srtm_39_03.tif > /data/tif/srtm_39_03.tif
 
+/data/tif/srtm_39_04.tif: /data/download/srtm_39_04.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_39_04.zip srtm_39_04.tif > /data/tif/srtm_39_04.tif
+
+/data/tif/srtm_39_05.tif: /data/download/srtm_39_05.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_39_05.zip srtm_39_05.tif > /data/tif/srtm_39_05.tif
+
+/data/tif/srtm_40_01.tif: /data/download/srtm_40_01.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_40_01.zip srtm_40_01.tif > /data/tif/srtm_40_01.tif
+
+/data/tif/srtm_40_02.tif: /data/download/srtm_40_02.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_40_02.zip srtm_40_02.tif > /data/tif/srtm_40_02.tif
+
+/data/tif/srtm_40_03.tif: /data/download/srtm_40_03.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_40_03.zip srtm_40_03.tif > /data/tif/srtm_40_03.tif
+
+/data/tif/srtm_40_04.tif: /data/download/srtm_40_04.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_40_04.zip srtm_40_04.tif > /data/tif/srtm_40_04.tif
+
+/data/tif/srtm_40_05.tif: /data/download/srtm_40_05.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_40_05.zip srtm_40_05.tif > /data/tif/srtm_40_05.tif
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 #	Downloads
 # ----------------------------------------------------------------------------------------------------------------------
+
+/data/download/srtm_34_02.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_34_02.zip -O /data/download/srtm_34_02.zip
+	touch $@
+
+/data/download/srtm_35_01.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_35_01.zip -O /data/download/srtm_35_01.zip
+	touch $@
+
+/data/download/srtm_35_02.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_35_02.zip -O /data/download/srtm_35_02.zip
+	touch $@
+
+/data/download/srtm_35_03.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_35_03.zip -O /data/download/srtm_35_03.zip
+	touch $@
+
+/data/download/srtm_35_04.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_35_04.zip -O /data/download/srtm_35_04.zip
+	touch $@
+
+/data/download/srtm_36_01.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_36_01.zip -O /data/download/srtm_36_01.zip
+	touch $@
+
+/data/download/srtm_36_02.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_36_02.zip -O /data/download/srtm_36_02.zip
+	touch $@
+
+/data/download/srtm_36_03.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_36_03.zip -O /data/download/srtm_36_03.zip
+	touch $@
+
+/data/download/srtm_36_04.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_36_04.zip -O /data/download/srtm_36_04.zip
+	touch $@
+
+/data/download/srtm_36_05.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_36_05.zip -O /data/download/srtm_36_05.zip
+	touch $@
+
+/data/download/srtm_37_01.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_37_01.zip -O /data/download/srtm_37_01.zip
+	touch $@
+
+/data/download/srtm_37_02.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_37_02.zip -O /data/download/srtm_37_02.zip
+	touch $@
+
+/data/download/srtm_37_03.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_37_03.zip -O /data/download/srtm_37_03.zip
+	touch $@
+
+/data/download/srtm_37_04.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_37_04.zip -O /data/download/srtm_37_04.zip
+	touch $@
+
+/data/download/srtm_37_05.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_37_05.zip -O /data/download/srtm_37_05.zip
+	touch $@
+
+/data/download/srtm_38_01.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_38_01.zip -O /data/download/srtm_38_01.zip
+	touch $@
+
+/data/download/srtm_38_02.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_38_02.zip -O /data/download/srtm_38_02.zip
+	touch $@
 
 /data/download/srtm_38_03.zip:
 	mkdir -p /data/download
 	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_38_03.zip -O /data/download/srtm_38_03.zip
 	touch $@
 
+/data/download/srtm_38_04.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_38_04.zip -O /data/download/srtm_38_04.zip
+	touch $@
+
+/data/download/srtm_38_05.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_38_05.zip -O /data/download/srtm_38_05.zip
+	touch $@
+
+/data/download/srtm_39_01.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_39_01.zip -O /data/download/srtm_39_01.zip
+	touch $@
+
+/data/download/srtm_39_02.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_39_02.zip -O /data/download/srtm_39_02.zip
+	touch $@
+
 /data/download/srtm_39_03.zip:
 	mkdir -p /data/download
 	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_39_03.zip -O /data/download/srtm_39_03.zip
+	touch $@
+
+/data/download/srtm_39_04.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_39_04.zip -O /data/download/srtm_39_04.zip
+	touch $@
+
+/data/download/srtm_39_03.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_39_03.zip -O /data/download/srtm_39_03.zip
+	touch $@
+
+/data/download/srtm_39_05.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_39_05.zip -O /data/download/srtm_39_05.zip
+	touch $@
+
+/data/download/srtm_40_01.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_40_01.zip -O /data/download/srtm_40_01.zip
+	touch $@
+
+/data/download/srtm_40_02.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_40_02.zip -O /data/download/srtm_40_02.zip
+	touch $@
+
+/data/download/srtm_40_03.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_40_03.zip -O /data/download/srtm_40_03.zip
+	touch $@
+
+/data/download/srtm_40_04.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_40_04.zip -O /data/download/srtm_40_04.zip
+	touch $@
+
+/data/download/srtm_40_05.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_40_05.zip -O /data/download/srtm_40_05.zip
 	touch $@
 
 /data/download/switzerland.osm.pbf:
