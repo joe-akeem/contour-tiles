@@ -182,10 +182,9 @@ contour: /data/mbtiles/hillshade.mbtiles /data/mbtiles/slope.mbtiles /data/mbtil
 # Loading the database
 # ----------------------------------------------------------------------------------------------------------------------
 
-#/data/load-europe: /data/download/europe.osm.pbf
-/data/load-europe: /data/download/switzerland.osm.pbf
-	#osm2pgsql --create --slim --cache 4000 --host $(PG_PORT_5432_TCP_ADDR) --port $(PG_PORT_5432_TCP_PORT) --username osm --database gis --hstore-column mtb /osm/data/download/europe.osm.pbf
-	osm2pgsql --create --slim --cache 4000 --host $(PG_PORT_5432_TCP_ADDR) --port $(PG_PORT_5432_TCP_PORT) --username osm --database gis --hstore-column mtb /data/download/switzerland.osm.pbf
+/data/load-europe: /data/download/europe.osm.pbf
+	osm2pgsql --create --slim --cache 4000 --host $(PG_PORT_5432_TCP_ADDR) --port $(PG_PORT_5432_TCP_PORT) --username osm --database gis --hstore-column mtb /osm/data/download/europe.osm.pbf
+	#osm2pgsql --create --slim --cache 4000 --host $(PG_PORT_5432_TCP_ADDR) --port $(PG_PORT_5432_TCP_PORT) --username osm --database gis --hstore-column mtb /data/download/switzerland.osm.pbf
 	psql -h $(PG_PORT_5432_TCP_ADDR) -p $(PG_PORT_5432_TCP_PORT)  -U osm -d gis -f /sql/create_indexes.sql
 	touch /data/load-europe
 
