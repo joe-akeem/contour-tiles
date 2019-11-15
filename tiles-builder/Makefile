@@ -218,6 +218,7 @@ contour: /data/mbtiles/hillshade.mbtiles /data/mbtiles/slope.mbtiles /data/mbtil
 							/data/tif/srtm_35_02.tif \
 							/data/tif/srtm_35_03.tif \
 							/data/tif/srtm_35_04.tif \
+							/data/tif/srtm_35_05.tif \
 							/data/tif/srtm_36_01.tif \
 							/data/tif/srtm_36_02.tif \
 							/data/tif/srtm_36_03.tif \
@@ -249,6 +250,7 @@ contour: /data/mbtiles/hillshade.mbtiles /data/mbtiles/slope.mbtiles /data/mbtil
 					 /data/tif/srtm_35_02.tif \
 					 /data/tif/srtm_35_03.tif \
 					 /data/tif/srtm_35_04.tif \
+					 /data/tif/srtm_35_05.tif \
 					 /data/tif/srtm_36_01.tif \
 					 /data/tif/srtm_36_02.tif \
 					 /data/tif/srtm_36_03.tif \
@@ -294,6 +296,10 @@ contour: /data/mbtiles/hillshade.mbtiles /data/mbtiles/slope.mbtiles /data/mbtil
 /data/tif/srtm_35_04.tif: /data/download/srtm_35_04.zip
 	mkdir -p /data/tif
 	unzip -p /data/download/srtm_35_04.zip srtm_35_04.tif > /data/tif/srtm_35_04.tif
+
+/data/tif/srtm_35_05.tif: /data/download/srtm_35_05.zip
+	mkdir -p /data/tif
+	unzip -p /data/download/srtm_35_05.zip srtm_35_05.tif > /data/tif/srtm_35_05.tif
 
 /data/tif/srtm_36_01.tif: /data/download/srtm_36_01.zip
 	mkdir -p /data/tif
@@ -423,6 +429,11 @@ contour: /data/mbtiles/hillshade.mbtiles /data/mbtiles/slope.mbtiles /data/mbtil
 /data/download/srtm_35_04.zip:
 	mkdir -p /data/download
 	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_35_04.zip -O /data/download/srtm_35_04.zip
+	touch $@
+
+/data/download/srtm_35_05.zip:
+	mkdir -p /data/download
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_35_05.zip -O /data/download/srtm_35_05.zip
 	touch $@
 
 /data/download/srtm_36_01.zip:
