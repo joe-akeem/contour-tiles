@@ -1,14 +1,14 @@
 FROM osgeo/gdal:ubuntu-full-latest
-MAINTAINER joeakeem "j.lengacher@gmx.net"
+MAINTAINER joeakeem "info@singletrail-map.eu"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get clean
 
+RUN apt-get update -y && apt-get install -y software-properties-common
 RUN add-apt-repository ppa:ubuntugis/ppa
 
 RUN apt-get update -y && apt-get install -y \
-        software-properties-common \
         postgis \
         make \
         curl \
