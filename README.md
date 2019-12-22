@@ -1,6 +1,9 @@
 # Countour Lines and Hillshade files for Europe
 
-A docker image to create vector tiles for contour lines and hillshade raster tiles of europe (mbtiles files).
+A docker image to create vector tiles for contour lines and hillshade (relief) raster tiles of europe (mbtiles files).
+
+The relief and is based on data from [SRTM 90m DEM Digital Elevation Database](http://srtm.csi.cgiar.org) and
+[OpenSlopwMap](https://www.openslopemap.org/).
 
 ## Getting it
 ```bash
@@ -24,12 +27,12 @@ To inspect the mbtiles files a local tileserver can be started as follows:
 docker-compose up -d contour-tileserver
 ```
 
-You will notice that there are contour lines for 100 meter and for 20 meter equidistance. The 100 meter equidistance
-will start showing from zoom level 10 while the 20 meter equidistance lines start showing from zoom level 13 upwards.
+You will notice that there are contour lines for 100 meter and for 20 meter equidistance. The 100 meter equidistance lines
+will start showing from zoom level 10 while the 20 meter equidistance lines are showing from zoom level 13 upwards.
  
-The contour lines are tagged with two fields:
-* `elev: the elevation of the contour line in meters above sea level
-* `distance: the equidistance of the contour line (20m or 100m) which helps styling them differently. E.g.you might want
+The contour lines are tagged with three fields:
+* `elev`: the elevation of the contour line in meters above sea level
+* `distance: the equidistance of the contour line (20m or 100m) which helps styling them differently. E.g. you might want
   to show the 100 meter lines more prominent.
 * `type`: this is currently `normal` for all contour lines. There are plans to encode the terrain in this field
   (e.g. `normal`, `rock`, `glacier`) so you can style the lines differently depending on the terrain (e.g. blue for glaciers).
