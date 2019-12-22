@@ -26,6 +26,8 @@ To inspect the mbtiles files a local tileserver can be started as follows:
 ```bash
 docker-compose up -d contour-tileserver
 ```
+The web interface of the tile server is made available at [localhost:8080](http://localhost:8080).
+A basic style is also available and can be used to view the generated data e.g. as [Vector Tiles](http://localhost:8080/styles/basic/?vector#13.57/46.49646/8.61135).
 
 You will notice that there are contour lines for 100 meter and for 20 meter equidistance. The 100 meter equidistance lines
 will start showing from zoom level 10 while the 20 meter equidistance lines are showing from zoom level 13 upwards.
@@ -36,3 +38,5 @@ The contour lines are tagged with three fields:
   to show the 100 meter lines more prominent.
 * `type`: this is currently `normal` for all contour lines. There are plans to encode the terrain in this field
   (e.g. `normal`, `rock`, `glacier`) so you can style the lines differently depending on the terrain (e.g. blue for glaciers).
+
+![Relief with contour lines](./img/relief.png)

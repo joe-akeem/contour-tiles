@@ -1,0 +1,151 @@
+{
+  "version": 8,
+  "name": "Basic",
+  "metadata": {
+    "maputnik:license": "https://github.com/maputnik/osm-liberty/blob/gh-pages/LICENSE.md",
+    "maputnik:renderer": "mbgljs"
+  },
+  "sources": {
+    "contour": {
+      "type": "vector",
+      "url": "mbtiles://contour.json"
+    },
+    "natural_earth_shaded_relief": {
+      "tileSize": 256,
+      "url": "mbtiles://hillshade.mbtiles",
+      "type": "raster"
+    },
+    "natural_earth_shaded_slope": {
+      "tileSize": 256,
+      "url" : "mbtiles://slope.mbtiles",
+      "type": "raster"
+    }
+  },
+  "glyphs": "https://glfonts.lukasmartinelli.ch/fonts/{fontstack}/{range}.pbf",
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "rgba(248, 249, 251, 1)"
+      }
+    },
+    {
+      "id": "contour_normal20",
+      "type": "line",
+      "source": "contour",
+      "source-layer": "contour",
+      "paint": {
+        "line-color": "rgba(118, 94, 29, 1)",
+        "line-width": 0.1
+      },
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "normal"
+        ],
+        [
+          "==",
+          "distance",
+          "20m"
+        ]
+      ],
+      "minzoom": 13
+    },
+    {
+      "id": "contour_normal100",
+      "type": "line",
+      "source": "contour",
+      "source-layer": "contour",
+      "layout": {
+        "visibility": "visible"
+      },
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "normal"
+        ],
+        [
+          "==",
+          "distance",
+          "100m"
+        ]
+      ],
+      "paint": {
+        "line-color": "rgba(118, 94, 29, 1)",
+        "line-width": {
+          "stops": [
+            [
+              10,
+              0.1
+            ],
+            [
+              13,
+              0.3
+            ]
+          ]
+        }
+      },
+      "minzoom": 10
+    },
+    {
+      "id": "contour_normal_label",
+      "type": "symbol",
+      "source": "contour",
+      "source-layer": "contour",
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "normal"
+        ],
+        [
+          "==",
+          "distance",
+          "100m"
+        ]
+      ],
+      "layout": {
+        "text-field": "{elev}",
+        "symbol-placement": "line",
+        "symbol-spacing": 500,
+        "text-size": 10,
+        "visibility": "visible",
+        "text-font": [
+          "Open Sans Italic"
+        ]
+      },
+      "paint": {
+        "text-color": "rgba(118, 94, 29, 1)"
+      },
+      "minzoom": 11
+    },
+    {
+      "id": "hillshade",
+      "type": "raster",
+      "source": "natural_earth_shaded_relief",
+      "paint": {
+        "raster-opacity": 0.2
+      }
+    },
+    {
+      "id": "slope",
+      "type": "raster",
+      "source": "natural_earth_shaded_slope",
+      "paint": {
+        "raster-opacity": 0.3
+      }
+    }
+  ],
+  "id": "basic",
+  "center": [
+    9.2822,
+    47.0931
+  ],
+  "zoom": 10
+}

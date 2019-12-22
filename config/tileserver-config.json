@@ -12,11 +12,13 @@
     "slope": {
       "mbtiles": "slope.mbtiles"
     },
-    "colored-slopes": {
-      "mbtiles": "OSloOVERLAY_LR_Alps_16.mbtiles"
-    },
     "contour": {
       "mbtiles": "contour.mbtiles"
+    }
+  },
+  "styles": {
+    "basic": {
+      "style": "/config/tileserver-style.json"
     }
   }
 }
