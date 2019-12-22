@@ -2,23 +2,10 @@
   "options": {
     "paths": {
       "root": ".",
-      "styles": "/styles",
       "mbtiles": "/data/mbtiles"
     }
   },
-  "styles": {
-    "basic": {
-      "style": "basic.json",
-      "tilejson": {
-        "type": "overlay",
-        "bounds": [5.9610, 47.5658, 10.1994, 45.7866]
-      }
-    }
-  },
   "data": {
-    "europe": {
-      "mbtiles": "europe.mbtiles"
-    },
     "hillshade": {
       "mbtiles": "hillshade.mbtiles"
     },
@@ -27,9 +14,6 @@
     },
     "colored-slopes": {
       "mbtiles": "OSloOVERLAY_LR_Alps_16.mbtiles"
-    },
-    "mountainbike": {
-      "mbtiles": "mtb.mbtiles"
     },
     "contour": {
       "mbtiles": "contour.mbtiles"

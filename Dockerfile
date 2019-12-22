@@ -16,15 +16,14 @@ RUN apt-get update -y && apt-get install -y postgis make curl unzip git cmake g+
 
 # build & install osm2psql
 WORKDIR /tmp
-RUN git clone https://github.com/openstreetmap/osm2pgsql.git
-WORKDIR /tmp/osm2pgsql
-RUN git checkout tags/1.0.0
-
-RUN mkdir build
-WORKDIR /tmp/osm2pgsql/build
-RUN cmake ..
-RUN make
-RUN make install
+#RUN git clone https://github.com/openstreetmap/osm2pgsql.git
+#WORKDIR /tmp/osm2pgsql
+#RUN git checkout tags/1.0.0
+#RUN mkdir build
+#WORKDIR /tmp/osm2pgsql/build
+#RUN cmake ..
+#RUN make
+#RUN make install
 
 # build & install tippecanoe
 WORKDIR /tmp
@@ -34,13 +33,13 @@ RUN make -j
 RUN make install
 
 # cleanup
-RUN rm -rf /tmp/osm2pgsql /tmp/tippecanoe
+RUN rm -rf /tmp/tippecanoe # /tmp/osm2pgsql
 
 # Add the Makefile & sql scripts
-COPY Makefile /tileserver/Makefile
+COPY Makefile /contours/Makefile
 COPY sql /sql
 
-WORKDIR /tileserver
+WORKDIR /contours
 
 # per default run "make all" which will generate all mbtiles files
 ENTRYPOINT ["/usr/bin/make"]

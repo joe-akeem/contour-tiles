@@ -1,51 +1,35 @@
-# Singletrailmap Tileserver
+# Countour Lines and Hillshade files for Europe
 
-## Getting the code
+A docker image to create vector tiles for contour lines and hillshade raster tiles of europe (mbtiles files).
+
+## Getting it
 ```bash
-git clone https://github.com/joe-akeem/tileserver.git
+git clone https://github.com/joe-akeem/contour-tiles.git
 ```
 
-## Building & pushing the docker images
-```bash
-cd tileserver
-docker-compose -f docker-compose-server.yml build
-docker-compose -f docker-compose-server.yml push
-docker-compose -f docker-compose-builder.yml build
-docker-compose -f docker-compose-builder.yml push
-```
-
-This will call docker build for all sub projects and push the newly built images to dockerhub.
-
-## Creating the vector tiles
-```bash
-mkdir ~/osm
-docker-compose -f docker-compose-builder.yml up -d
-```
-
-This will start the PostGIS database, import OSM data and generate the mbiles files. All data (downloads,
-intermediate files and final mbtiles files) will be created in the folder `~/osm`.
-The PostGIS database can be reached at localhost:5432
-
-See what's going on in one of the containers:
-```bash
-docker logs -f dockeruser_tilesbuilder_1
-```
-
-Once the mbtiles are generated all services can be stopped:
-```bash
-docker-compose -f docker-compose-builder.yml down
-```
-
-## Starting the tileserver
-The tileserver relies on the mbtiles files tp be present in the folder `~/osm`. If they have been created as described
-above the tiles server can be started as follows: 
+## Building the mbtiles files
 
 ```bash
-docker-compose -f docker-compose-server.yml up -d
+cd contour-tiles
+docker-compose run contour-tiles
 ```
 
-This will:
-* start the tiles server serving vector tiles from the mbtiles files in ~/osm at http://localhost:8080
-* start [Maputnik](https://maputnik.github.io/) at http://localhost:9000 
-    (lets you modify the tile server's style sheet on the fly)
-* start nginx with the tiles documentation at http://localhost:9090 
+This will build the mbtiles files in the folder `./osm/mbtiles`
+
+## Inspecting the tiles
+
+To inspect the mbtiles files a local tileserver can be started as follows:
+
+```bash
+docker-compose up -d contour-tileserver
+```
+
+You will notice that there are contour lines for 100 meter and for 20 meter equidistance. The 100 meter equidistance
+will start showing from zoom level 10 while the 20 meter equidistance lines start showing from zoom level 13 upwards.
+ 
+The contour lines are tagged with two fields:
+* `elev: the elevation of the contour line in meters above sea level
+* `distance: the equidistance of the contour line (20m or 100m) which helps styling them differently. E.g.you might want
+  to show the 100 meter lines more prominent.
+* `type`: this is currently `normal` for all contour lines. There are plans to encode the terrain in this field
+  (e.g. `normal`, `rock`, `glacier`) so you can style the lines differently depending on the terrain (e.g. blue for glaciers).

@@ -1,0 +1,27 @@
+version: '3'
+services:
+  contour-tiles:
+    build: .
+    image: joeakeem/contour-tiles
+    links:
+      - postgres-osm:pg
+    volumes:
+      - ./osm:/data
+    depends_on:
+      - postgres-osm
+
+  postgres-osm:
+    image: openfirmware/postgres-osm
+    ports:
+      - 5432
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+  contour-tileserver:
+    image: klokantech/tileserver-gl
+    ports:
+      - 8080:80
+    volumes:
+      - ./osm:/data
+      - ./config:/config
+    command: "-c /config/tileserver-config.json"

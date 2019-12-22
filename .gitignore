@@ -1,4 +1,4 @@
 /.idea/
-/data/
-/tiles-docs/build/
 /tileserver.iml
+/osm/
+/postgres-data/
