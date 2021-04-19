@@ -3,7 +3,7 @@
 A docker image to create vector tiles for contour lines and hillshade (relief) raster tiles of europe (mbtiles files).
 
 The relief and is based on data from [SRTM 90m DEM Digital Elevation Database](http://srtm.csi.cgiar.org) and
-[OpenSlopwMap](https://www.openslopemap.org/).
+[OpenSlopeMap](https://www.openslopemap.org/).
 
 ## Getting it
 ```bash
