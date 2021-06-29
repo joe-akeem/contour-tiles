@@ -8,7 +8,7 @@
   "sources": {
     "contour": {
       "type": "vector",
-      "url": "mbtiles://contour.json"
+      "url": "mbtiles://contour.mbtiles"
     },
     "natural_earth_shaded_relief": {
       "tileSize": 256,
