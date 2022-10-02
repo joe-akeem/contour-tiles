@@ -1,4 +1,4 @@
-FROM osgeo/gdal:ubuntu-small-3.0.2
+FROM osgeo/gdal:ubuntu-full-3.5.2
 MAINTAINER joeakeem "info@singletrail-map.eu"
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -29,7 +29,7 @@ RUN apt-get update -y && apt-get install -y \
         libsqlite3-dev \
         zlib1g-dev \
         wget \
-        python-gdal \
+        python3-gdal \
         gdal-bin
 
 
@@ -37,7 +37,7 @@ RUN apt-get update -y && apt-get install -y \
 WORKDIR /tmp
 RUN git clone https://github.com/mapbox/tippecanoe.git
 WORKDIR /tmp/tippecanoe
-RUN make -j
+RUN make
 RUN make install
 
 # cleanup
