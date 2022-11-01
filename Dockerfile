@@ -1,4 +1,4 @@
-FROM osgeo/gdal:ubuntu-full-3.5.2
+FROM osgeo/gdal:ubuntu-full-3.5.3
 MAINTAINER joeakeem "info@singletrail-map.eu"
 
 ENV DEBIAN_FRONTEND=noninteractive
