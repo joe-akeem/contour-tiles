@@ -146,5 +146,5 @@ $(TIFDIR)/srtm_%.tif: $(DOWNLOADDIR)/srtm_%.zip
 $(DOWNLOADDIR)/srtm_%.zip:
 	mkdir -p $(DOWNLOADDIR)
 	base_name=$(shell basename $@)
-	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/$(shell basename $@) -O $@
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/$(shell basename $@) --no-check-certificate -O $@
 	touch $@
