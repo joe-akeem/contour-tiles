@@ -1,18 +1,10 @@
 version: '3'
 services:
-  contour-tiles:
-    build: .
-    image: joeakeem/contour-tiles
+  contour-tileserver:
+    image: klokantech/tileserver-gl:v2.6.0
+    ports:
+      - 8080:80
     volumes:
       - ./osm:/data
-    depends_on:
-      - postgres-osm
-
-  postgres-osm:
-    image: kartoza/postgis:15-3.3
-    volumes:
-      - ./postgres-data:/var/lib/postgresql/data
-    environment:
-      ALLOW_IP_RANGE: "0.0.0.0/0"
-      POSTGRES_USER: "contour"
-      POSTGRES_PASS: "passwd"
+      - ./config:/config
+    command: "-c /config/tileserver-config.json"
