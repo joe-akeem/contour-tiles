@@ -135,8 +135,8 @@ $(TIFDIR)/contour-4326.tif: $(TIFDIR)/srtm_35_01.tif \
 	gdal_merge.py -o $@ $^
 
 $(TIFDIR)/srtm_%.tif: $(DOWNLOADDIR)/srtm_%.zip
-        mkdir -p $(TIFDIR)
-        unzip -p $< *.tif > $@
+	mkdir -p $(TIFDIR)
+	unzip -p $< *.tif > $@
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -144,7 +144,7 @@ $(TIFDIR)/srtm_%.tif: $(DOWNLOADDIR)/srtm_%.zip
 # ----------------------------------------------------------------------------------------------------------------------
 
 $(DOWNLOADDIR)/srtm_%.zip:
-        mkdir -p $(DOWNLOADDIR)
-        base_name=$(shell basename $@)
-        wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/$(shell basename $@) -O $@
-        touch $@
+	mkdir -p $(DOWNLOADDIR)
+	base_name=$(shell basename $@)
+	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/$(shell basename $@) -O $@
+	touch $@
