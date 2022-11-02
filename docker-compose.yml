@@ -3,25 +3,16 @@ services:
   contour-tiles:
     build: .
     image: joeakeem/contour-tiles
-    links:
-      - postgres-osm:pg
     volumes:
       - ./osm:/data
     depends_on:
       - postgres-osm
 
   postgres-osm:
-    image: openfirmware/postgres-osm:9.3.6
-    ports:
-      - 5432
+    image: kartoza/postgis:15-3.3
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
-
-  contour-tileserver:
-    image: klokantech/tileserver-gl:v2.6.0
-    ports:
-      - 8080:80
-    volumes:
-      - ./osm:/data
-      - ./config:/config
-    command: "-c /config/tileserver-config.json"
+    environment:
+      ALLOW_IP_RANGE: "0.0.0.0/0"
+      POSTGRES_USER: "contour"
+      POSTGRES_PASS: "passwd"
