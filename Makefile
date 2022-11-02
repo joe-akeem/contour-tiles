@@ -102,8 +102,7 @@ $(TIFDIR)/contour-3785.tif: $(TIFDIR)/contour-4326.tif
 	mkdir -p $(TIFDIR)
 	gdalwarp -s_srs EPSG:4326 -t_srs EPSG:3785 -r bilinear $(TIFDIR)/contour-4326.tif $(TIFDIR)/contour-3785.tif
 
-$(TIFDIR)/contour-4326.tif: $(TIFDIR)/srtm_34_02.tif \
-							$(TIFDIR)/srtm_35_01.tif \
+$(TIFDIR)/contour-4326.tif: $(TIFDIR)/srtm_35_01.tif \
 							$(TIFDIR)/srtm_35_02.tif \
 							$(TIFDIR)/srtm_35_03.tif \
 							$(TIFDIR)/srtm_35_04.tif \
