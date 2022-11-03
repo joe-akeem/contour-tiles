@@ -40,3 +40,8 @@ The contour lines are tagged with three fields:
   (e.g. `normal`, `rock`, `glacier`) so you can style the lines differently depending on the terrain (e.g. blue for glaciers).
 
 ![Relief with contour lines](./img/relief.png)
+
+## Performances
+
+The container has been tried with success on an Azure VM, Standard_D8ds_v5 with
+a P30 SSD (1To, 5kIOPS). The whole process took about 45 minutes.
