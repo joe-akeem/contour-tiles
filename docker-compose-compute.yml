@@ -7,6 +7,9 @@ services:
       - ./osm:/data
     depends_on:
       - postgres-osm
+    environment:
+      DESCRIPTION: "Europe contour lines vector data by singletrail-map.eu"
+      ATTRIBUTION: "©singletrail-map.eu ©OpenStreetMap"
 
   postgres-osm:
     image: kartoza/postgis:15-3.3

@@ -8,6 +8,9 @@ DOWNLOADDIR := /data/download
 GEOJSONDIR := /data/geojson
 MBTILESDIR := /data/mbtiles
 
+DESCRIPTION := ${DESCRIPTION}
+ATTRIBUTION := ${ATTRIBUTION}
+
 # ----------------------------------------------------------------------------------------------------------------------
 #	Main Targets
 # ----------------------------------------------------------------------------------------------------------------------
@@ -20,7 +23,7 @@ all: $(MBTILESDIR)/hillshade.mbtiles $(MBTILESDIR)/slope.mbtiles $(MBTILESDIR)/c
 
 $(MBTILESDIR)/contour.mbtiles: $(GEOJSONDIR)/contour.geojson
 	mkdir -p $(MBTILESDIR)
-	tippecanoe -f -o $(MBTILESDIR)/contour.mbtiles --no-tile-stats --description "Europe contour lines vector data by singletrail-map.eu" --attribution "©singletrail-map.eu ©OpenStreetMap" $(GEOJSONDIR)/contour.geojson
+	tippecanoe -f -o $(MBTILESDIR)/contour.mbtiles --no-tile-stats --description "$(DESCRIPTION)" --attribution "$(ATTRIBUTION)" $(GEOJSONDIR)/contour.geojson
 
 $(MBTILESDIR)/hillshade.mbtiles: $(TIFDIR)/hillshade.tif
 	mkdir -p $(MBTILESDIR)
