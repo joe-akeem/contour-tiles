@@ -43,32 +43,32 @@ $(GEOJSONDIR)/contour.geojson: $(GEOJSONDIR)/contour20.geojson $(GEOJSONDIR)/con
 	ogr2ogr -f GeoJSON $(GEOJSONDIR)/contour.geojson $(GEOJSONDIR)/contour20.geojson
 	ogr2ogr -f GeoJSON -append $(GEOJSONDIR)/contour.geojson $(GEOJSONDIR)/contour100.geojson
 
-$(GEOJSONDIR)/contour20.geojson: /data/shp2pgsql-contour /sql/contour20.sql
+$(GEOJSONDIR)/contour20.geojson: /data/contour2pgsql-contour /sql/contour20.sql
 	mkdir -p $(GEOJSONDIR)
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 $(GEOJSONDIR)/contour20.geojson "PG:host=$(PG_TCP_ADDR) port=$(PG_TCP_PORT) dbname=gis user=$(PG_USER) password=$(PG_PASS)" -sql @/sql/contour20.sql
 	sed -i 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 13 },/g' $(GEOJSONDIR)/contour20.geojson
 
-$(GEOJSONDIR)/contour100.geojson: /data/shp2pgsql-contour /sql/contour100.sql
+$(GEOJSONDIR)/contour100.geojson: /data/contour2pgsql-contour /sql/contour100.sql
 	mkdir -p $(GEOJSONDIR)
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 $(GEOJSONDIR)/contour100.geojson "PG:host=$(PG_TCP_ADDR) port=$(PG_TCP_PORT) dbname=gis user=$(PG_USER) password=$(PG_PASS)" -sql @/sql/contour100.sql
 	sed -i 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 10 },/g' $(GEOJSONDIR)/contour100.geojson
 
-$(GEOJSONDIR)/glacier_contour20.geojson: /data/shp2pgsql-contour /sql/glacier_contour20.sql
+$(GEOJSONDIR)/glacier_contour20.geojson: /data/contour2pgsql-contour /sql/glacier_contour20.sql
 	mkdir -p $(GEOJSONDIR)
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 $(GEOJSONDIR)/glacier_contour20.geojson "PG:host=$(PG_TCP_ADDR) port=$(PG_TCP_PORT) dbname=gis user=$(PG_USER) password=$(PG_PASS)" -sql @/sql/glacier_contour20.sql
 	sed -i 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 13 },/g' $(GEOJSONDIR)/glacier_contour20.geojson
 
-$(GEOJSONDIR)/glacier_contour100.geojson: /data/shp2pgsql-contour /sql/glacier_contour100.sql
+$(GEOJSONDIR)/glacier_contour100.geojson: /data/contour2pgsql-contour /sql/glacier_contour100.sql
 	mkdir -p $(GEOJSONDIR)
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 $(GEOJSONDIR)/glacier_contour100.geojson "PG:host=$(PG_TCP_ADDR) port=$(PG_TCP_PORT) dbname=gis user=$(PG_USER) password=$(PG_PASS)" -sql @/sql/glacier_contour100.sql
 	sed -i 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 10 },/g' $(GEOJSONDIR)/glacier_contour100.geojson
 
-$(GEOJSONDIR)/rock_contour20.geojson: /data/shp2pgsql-contour /sql/rock_contour20.sql
+$(GEOJSONDIR)/rock_contour20.geojson: /data/contour2pgsql-contour /sql/rock_contour20.sql
 	mkdir -p $(GEOJSONDIR)
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 $(GEOJSONDIR)/rock_contour20.geojson "PG:host=$(PG_TCP_ADDR) port=$(PG_TCP_PORT) dbname=gis user=$(PG_USER) password=$(PG_PASS)" -sql @/sql/rock_contour20.sql
 	sed -i 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 13 },/g' $(GEOJSONDIR)/rock_contour20.geojson
 
-$(GEOJSONDIR)/rock_contour100.geojson: /data/shp2pgsql-contour /sql/rock_contour100.sql
+$(GEOJSONDIR)/rock_contour100.geojson: /data/contour2pgsql-contour /sql/rock_contour100.sql
 	mkdir -p $(GEOJSONDIR)
 	ogr2ogr -f GeoJSON -t_srs EPSG:4326 -s_srs EPSG:3857 $(GEOJSONDIR)/rock_contour100.geojson "PG:host=$(PG_TCP_ADDR) port=$(PG_TCP_PORT) dbname=gis user=$(PG_USER) password=$(PG_PASS)" -sql @/sql/rock_contour100.sql
 	sed -i 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 10 },/g' $(GEOJSONDIR)/rock_contour100.geojson
@@ -77,18 +77,14 @@ $(GEOJSONDIR)/rock_contour100.geojson: /data/shp2pgsql-contour /sql/rock_contour
 # Loading the database
 # ----------------------------------------------------------------------------------------------------------------------
 
-/data/shp2pgsql-contour: $(TIFDIR)/contour-3785-20m.shp
-	PGPASSWORD=$(PG_PASS) psql -h $(PG_TCP_ADDR) -p $(PG_TCP_PORT)  -U $(PG_USER) -d gis -c "DROP TABLE IF EXISTS contourlines;"
-	/bin/bash -c 'shp2pgsql -s 3857 $(TIFDIR)/contour-3785-20m.shp contourlines | PGPASSWORD=$(PG_PASS) psql -v ON_ERROR_STOP=ON -h $(PG_TCP_ADDR) -p $(PG_TCP_PORT) -d gis -U $(PG_USER)'
-	touch /data/shp2pgsql-contour
+/data/contour2pgsql-contour: $(TIFDIR)/contour-3785.tif
+	PGPASSWORD=$(PG_PASS) psql -h $(PG_TCP_ADDR) -p $(PG_TCP_PORT) -U $(PG_USER) -d gis -c "DROP TABLE IF EXISTS contourlines;"       
+	gdal_contour -f PostgreSQL -nln contourlines -a elev -i 20 $(TIFDIR)/contour-3785.tif "PG:host=$(PG_TCP_ADDR) port=$(PG_TCP_PORT) dbname=gis user=$(PG_USER) password=$(PG_PASS)"
+	touch /data/contour2pgsql-contour
 
 # ----------------------------------------------------------------------------------------------------------------------
 #	Building tifs
 # ----------------------------------------------------------------------------------------------------------------------
-
-$(TIFDIR)/contour-3785-20m.shp: $(TIFDIR)/contour-3785.tif
-	mkdir -p $(TIFDIR)
-	gdal_contour -a elev -i 20 $(TIFDIR)/contour-3785.tif $(TIFDIR)/contour-3785-20m.shp
 
 $(TIFDIR)/slope.tif: $(TIFDIR)/contour-3785.tif
 	mkdir -p $(TIFDIR)
@@ -102,7 +98,8 @@ $(TIFDIR)/contour-3785.tif: $(TIFDIR)/contour-4326.tif
 	mkdir -p $(TIFDIR)
 	gdalwarp -s_srs EPSG:4326 -t_srs EPSG:3785 -r bilinear $(TIFDIR)/contour-4326.tif $(TIFDIR)/contour-3785.tif
 
-$(TIFDIR)/contour-4326.tif: $(TIFDIR)/srtm_35_01.tif \
+$(TIFDIR)/contour-4326.tif: $(TIFDIR)/srtm_34_02.tif \
+							$(TIFDIR)/srtm_35_01.tif \
 							$(TIFDIR)/srtm_35_02.tif \
 							$(TIFDIR)/srtm_35_03.tif \
 							$(TIFDIR)/srtm_35_04.tif \
