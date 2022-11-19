@@ -14,7 +14,7 @@ git clone https://github.com/joe-akeem/contour-tiles.git
 
 ```bash
 cd contour-tiles
-docker-compose run contour-tiles
+docker-compose -f docker-compose-compute.yml build contour-tiles && docker-compose -f docker-compose-compute.yml up
 ```
 
 This will build the mbtiles files in the folder `./osm/mbtiles`
@@ -24,7 +24,7 @@ This will build the mbtiles files in the folder `./osm/mbtiles`
 To inspect the mbtiles files a local tileserver can be started as follows:
 
 ```bash
-docker-compose up -d contour-tileserver
+docker-compose up
 ```
 The web interface of the tile server is made available at [localhost:8080](http://localhost:8080).
 A basic style is also available and can be used to view the generated data e.g. as [Vector Tiles](http://localhost:8080/styles/basic/?vector#13.57/46.49646/8.61135).
@@ -40,3 +40,8 @@ The contour lines are tagged with three fields:
   (e.g. `normal`, `rock`, `glacier`) so you can style the lines differently depending on the terrain (e.g. blue for glaciers).
 
 ![Relief with contour lines](./img/relief.png)
+
+## Performances
+
+The container has been tried with success on an Azure VM, Standard_D8ds_v5 with
+a P30 SSD (1To, 5kIOPS). The whole process took about 45 minutes.
