@@ -1,7 +1,0 @@
-select
-       'normal' as type,
-       '20m' as distance,
-       contourlines.elev,
-       contourlines.wkb_geometry
-from contourlines
-where mod(cast(contourlines.elev as integer), 100) <> 0
