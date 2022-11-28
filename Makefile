@@ -11,6 +11,11 @@ MBTILESDIR := /data/mbtiles
 DESCRIPTION := ${DESCRIPTION}
 ATTRIBUTION := ${ATTRIBUTION}
 
+MIN_X := ${MIN_X}
+MAX_X := ${MAX_X}
+MIN_Y := ${MIN_Y}
+MAX_Y := ${MAX_Y}
+
 GDAL_COMPRESS_OPTIONS := -co COMPRESS=LZW -co BIGTIFF=YES -co PREDICTOR=2 -co TILED=YES
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -99,50 +104,21 @@ $(TIFDIR)/hillshade.tif: $(TIFDIR)/contour.tif
 	mkdir -p $(TIFDIR)
 	gdaldem hillshade -z 5 $< $@
 
-$(TIFDIR)/contour.tif:		$(TIFDIR)/srtm_34_02.tif \
-							$(TIFDIR)/srtm_35_01.tif \
-							$(TIFDIR)/srtm_35_02.tif \
-							$(TIFDIR)/srtm_35_03.tif \
-							$(TIFDIR)/srtm_35_04.tif \
-							$(TIFDIR)/srtm_35_05.tif \
-							$(TIFDIR)/srtm_36_01.tif \
-							$(TIFDIR)/srtm_36_02.tif \
-							$(TIFDIR)/srtm_36_03.tif \
-							$(TIFDIR)/srtm_36_04.tif \
-							$(TIFDIR)/srtm_36_05.tif \
- 							$(TIFDIR)/srtm_37_01.tif \
- 							$(TIFDIR)/srtm_37_02.tif \
- 							$(TIFDIR)/srtm_37_03.tif \
- 							$(TIFDIR)/srtm_37_04.tif \
- 							$(TIFDIR)/srtm_37_05.tif \
- 							$(TIFDIR)/srtm_38_01.tif \
- 							$(TIFDIR)/srtm_38_02.tif \
- 							$(TIFDIR)/srtm_38_03.tif \
- 							$(TIFDIR)/srtm_38_04.tif \
- 							$(TIFDIR)/srtm_38_05.tif \
- 							$(TIFDIR)/srtm_39_01.tif \
- 							$(TIFDIR)/srtm_39_02.tif \
- 							$(TIFDIR)/srtm_39_03.tif \
- 							$(TIFDIR)/srtm_39_04.tif \
- 							$(TIFDIR)/srtm_39_05.tif \
- 							$(TIFDIR)/srtm_40_01.tif \
- 							$(TIFDIR)/srtm_40_02.tif \
- 							$(TIFDIR)/srtm_40_03.tif \
- 							$(TIFDIR)/srtm_40_04.tif \
- 							$(TIFDIR)/srtm_40_05.tif
-	gdal_merge.py $(GDAL_COMPRESS_OPTIONS) -o $@ $^
-
-$(TIFDIR)/srtm_%.tif: $(DOWNLOADDIR)/srtm_%.zip
-	mkdir -p $(TIFDIR)
-	unzip -p $< *.tif > $@
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-#	Downloads
-# ----------------------------------------------------------------------------------------------------------------------
-
-$(DOWNLOADDIR)/srtm_%.zip:
+$(TIFDIR)/contour.tif:
 	mkdir -p $(DOWNLOADDIR)
-	base_name=$(shell basename $@)
-	wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/$(shell basename $@) --no-check-certificate -O $@
-	touch $@
+	mkdir -p $(TIFDIR)
+
+	for x in $$(seq -f "%02g" $(MIN_X) $(MAX_X)) ; do \
+		for y in $$(seq -f "%02g" $(MIN_Y) $(MAX_Y)) ; do \
+			wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_$${x}_$${y}.zip --no-check-certificate -O $(DOWNLOADDIR)/srtm_$${x}_$${y}.zip; \
+			unzip -p $(DOWNLOADDIR)/srtm_$${x}_$${y}.zip *.tif > $(TIFDIR)/srtm_$${x}_$${y}_lg.tif; \
+			gdal_translate $(GDAL_COMPRESS_OPTIONS) $(TIFDIR)/srtm_$${x}_$${y}_lg.tif $(TIFDIR)/srtm_$${x}_$${y}.tif; \
+			rm $(TIFDIR)/srtm_$${x}_$${y}_lg.tif; \
+		done; \
+		gdal_merge.py $(GDAL_COMPRESS_OPTIONS) -o $(TIFDIR)/contour-$${x}.tif $(TIFDIR)/srtm_$${x}_*.tif; \
+		rm $(TIFDIR)/srtm_$${x}_*.tif; \
+	done; \
+	echo merge
+	gdal_merge.py $(GDAL_COMPRESS_OPTIONS) -o $@ $(TIFDIR)/contour-*.tif
+	rm $(TIFDIR)/contour-*.tif;
+	

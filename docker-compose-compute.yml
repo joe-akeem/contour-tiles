@@ -10,6 +10,10 @@ services:
     environment:
       DESCRIPTION: "Europe contour lines vector data by singletrail-map.eu"
       ATTRIBUTION: "©singletrail-map.eu ©OpenStreetMap"
+      MIN_X: 34
+      MAX_X: 43
+      MIN_Y: 01
+      MAX_Y: 05
 
   postgres-osm:
     image: kartoza/postgis:15-3.3

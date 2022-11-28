@@ -19,6 +19,24 @@ docker-compose -f docker-compose-compute.yml build contour-tiles && docker-compo
 
 This will build the mbtiles files in the folder `./osm/mbtiles`
 
+## Area
+
+By default, the Europe area will be covered by this docker file. If your want to cover another area,
+please use this tool [SRTM Tile Grabber](https://dwtkns.com/srtm/). You'll be able to identify tiles
+that will be needed to build your data :
+
+![SRTM Tile example](./img/srtmtile.png)
+
+On this image, the name of the tile is srtm_38_03.zip. X is 38, Y is 03. For example, to compute
+Africa, you can use :
+
+* MIN_X : 33 ;
+* MAX_X : 47 ;
+* MIN_Y : 05 ;
+* MAX_Y : 19.
+
+Just modify the docker-compose-compute.yml so that your limits are reflected then launch the computation.
+
 ## Inspecting the tiles
 
 To inspect the mbtiles files a local tileserver can be started as follows:
