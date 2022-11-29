@@ -33,9 +33,22 @@ Africa, you can use :
 * MIN_X : 33 ;
 * MAX_X : 47 ;
 * MIN_Y : 05 ;
-* MAX_Y : 19.
+* MAX_Y : 19 ;
+* MIN_Z : 0 ;
+* MAX_Z : 4400.
+
+Please note that MIN_Z and MAX_Z are the limit in terms of altitude.
 
 Just modify the docker-compose-compute.yml so that your limits are reflected then launch the computation.
+
+## Computing large areas
+
+With the view to be able to compute areas, many improvments have been done. First of all, the main bottleneck was the use of `gdal_contour`. It's a single core process...
+
+To be able to overcome this problem, this script can now compute contour using parallelized job. You'll be able to define the number of parallel jobs using
+the `CONTOUR_JOBS` variables, in the `docker-compose-compute.yml` file. Beware of the fact that you should limit the number of jobs to the number of core
+that your host have. Moreover, each job will consume a lot of RAM, essentially dependent upon the size of the area. For the default area, i use 8 jobs with 16
+GB free RAM.
 
 ## Inspecting the tiles
 

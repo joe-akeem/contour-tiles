@@ -15,6 +15,10 @@ MIN_X := ${MIN_X}
 MAX_X := ${MAX_X}
 MIN_Y := ${MIN_Y}
 MAX_Y := ${MAX_Y}
+MIN_Z := ${MIN_Z}
+MAX_Z := ${MAX_Z}
+
+CONTOUR_JOBS := ${CONTOUR_JOBS}
 
 GDAL_COMPRESS_OPTIONS := -co COMPRESS=LZW -co BIGTIFF=YES -co PREDICTOR=2 -co TILED=YES
 
@@ -49,19 +53,20 @@ $(MBTILESDIR)/OSloOVERLAY_LR_Alps_16.mbtiles:
 #	Building geojson
 # ----------------------------------------------------------------------------------------------------------------------
 
-$(GEOJSONDIR)/contour.geojson: $(GEOJSONDIR)/contour20.geojson $(GEOJSONDIR)/contour100.geojson
-	ogr2ogr -f GeoJSON $(GEOJSONDIR)/contour.geojson $(GEOJSONDIR)/contour20.geojson
-	ogr2ogr -f GeoJSON -append $(GEOJSONDIR)/contour.geojson $(GEOJSONDIR)/contour100.geojson
-
-$(GEOJSONDIR)/contour20.geojson: $(TIFDIR)/contour.tif
+$(GEOJSONDIR)/contour.geojson: $(TIFDIR)/contour.tif
 	mkdir -p $(GEOJSONDIR)
-	gdal_contour -f GeoJSON -nln contourlines -a elev -i 20 $< $@
-	sed -i 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "minzoom": 13 },/g' $@
-
-$(GEOJSONDIR)/contour100.geojson: $(TIFDIR)/contour.tif
-	mkdir -p $(GEOJSONDIR)
-	gdal_contour -f GeoJSON -nln contourlines -a elev -i 100 $< $@
-	sed -i 's/"type": "Feature",/"type": "Feature", "tippecanoe" : { "maxzoom": 12 },/g' $@
+	seq $(MIN_Z) 20 $(MAX_Z) | parallel --jobs $(CONTOUR_JOBS) gdal_contour -f GeoJSON -nln contourlines -a elev -fl {1} $< $(GEOJSONDIR)/contour{1}.geojson
+	seq $(MIN_Z) 100 $(MAX_Z) | parallel 'sed -i "s/\"type\": \"Feature\",/\"type\": \"Feature\", \"tippecanoe\" : { \"minzoom\": 10 },/g" $(GEOJSONDIR)/contour{1}.geojson'
+	seq $$(( $(MIN_Z) + 20 )) 100 $(MAX_Z) | parallel --jobs $(CONTOUR_JOBS) 'sed -i "s/\"type\": \"Feature\",/\"type\": \"Feature\", \"tippecanoe\" : { \"minzoom\": 13 },/g" $(GEOJSONDIR)/contour{1}.geojson'
+	seq $$(( $(MIN_Z) + 40 )) 100 $(MAX_Z) | parallel --jobs $(CONTOUR_JOBS) 'sed -i "s/\"type\": \"Feature\",/\"type\": \"Feature\", \"tippecanoe\" : { \"minzoom\": 13 },/g" $(GEOJSONDIR)/contour{1}.geojson'
+	seq $$(( $(MIN_Z) + 60 )) 100 $(MAX_Z) | parallel --jobs $(CONTOUR_JOBS) 'sed -i "s/\"type\": \"Feature\",/\"type\": \"Feature\", \"tippecanoe\" : { \"minzoom\": 13 },/g" $(GEOJSONDIR)/contour{1}.geojson'
+	seq $$(( $(MIN_Z) + 80 )) 100 $(MAX_Z) | parallel --jobs $(CONTOUR_JOBS) 'sed -i "s/\"type\": \"Feature\",/\"type\": \"Feature\", \"tippecanoe\" : { \"minzoom\": 13 },/g" $(GEOJSONDIR)/contour{1}.geojson'
+	mv $(GEOJSONDIR)/contour$(MIN_Z).geojson $@
+	for x in $$(seq $$(( $(MIN_Z) + 20 )) 20 $(MAX_Z)) ; do \
+		ogr2ogr -f GeoJSON -append $@ $(GEOJSONDIR)/contour$${x}.geojson ; \
+		rm $(GEOJSONDIR)/contour$${x}.geojson ; \
+	done; \
+	echo ok
 
 $(GEOJSONDIR)/glacier_contour20.geojson: /data/contour2pgsql-contour /sql/glacier_contour20.sql
 	mkdir -p $(GEOJSONDIR)
@@ -111,9 +116,8 @@ $(TIFDIR)/contour.tif:
 	for x in $$(seq -f "%02g" $(MIN_X) $(MAX_X)) ; do \
 		for y in $$(seq -f "%02g" $(MIN_Y) $(MAX_Y)) ; do \
 			wget http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/TIFF/srtm_$${x}_$${y}.zip --no-check-certificate -O $(DOWNLOADDIR)/srtm_$${x}_$${y}.zip; \
-			unzip -p $(DOWNLOADDIR)/srtm_$${x}_$${y}.zip *.tif > $(TIFDIR)/srtm_$${x}_$${y}_lg.tif; \
-			gdal_translate $(GDAL_COMPRESS_OPTIONS) $(TIFDIR)/srtm_$${x}_$${y}_lg.tif $(TIFDIR)/srtm_$${x}_$${y}.tif; \
-			rm $(TIFDIR)/srtm_$${x}_$${y}_lg.tif; \
+			unzip -p $(DOWNLOADDIR)/srtm_$${x}_$${y}.zip *.tif > $(TIFDIR)/srtm_$${x}_$${y}.tif; \
+			rm $(DOWNLOADDIR)/srtm_$${x}_$${y}.zip; \
 		done; \
 		gdal_merge.py $(GDAL_COMPRESS_OPTIONS) -o $(TIFDIR)/contour-$${x}.tif $(TIFDIR)/srtm_$${x}_*.tif; \
 		rm $(TIFDIR)/srtm_$${x}_*.tif; \
