@@ -7,6 +7,7 @@ TIFDIR := /data/tif
 DOWNLOADDIR := /data/download
 GEOJSONDIR := /data/geojson
 MBTILESDIR := /data/mbtiles
+LARGETMPDIR := /data/tmp
 
 DESCRIPTION := ${DESCRIPTION}
 ATTRIBUTION := ${ATTRIBUTION}
@@ -19,6 +20,7 @@ MIN_Z := ${MIN_Z}
 MAX_Z := ${MAX_Z}
 
 CONTOUR_JOBS := ${CONTOUR_JOBS}
+GDAL_CACHEMAX := ${GDAL_CACHEMAX}
 
 GDAL_COMPRESS_OPTIONS := -co COMPRESS=LZW -co BIGTIFF=YES -co PREDICTOR=2 -co TILED=YES
 
@@ -34,16 +36,17 @@ all: $(MBTILESDIR)/hillshade.mbtiles $(MBTILESDIR)/slope.mbtiles $(MBTILESDIR)/c
 
 $(MBTILESDIR)/contour.mbtiles: $(GEOJSONDIR)/contour.geojson
 	mkdir -p $(MBTILESDIR)
-	tippecanoe -f -Z10 -o $@ --no-tile-stats --description "$(DESCRIPTION)" --attribution "$(ATTRIBUTION)" $<
+	mkdir -p $(LARGETMPDIR)
+	tippecanoe -t $(LARGETMPDIR) -f -Z10 -o $@ --no-tile-stats --description "$(DESCRIPTION)" --attribution "$(ATTRIBUTION)" -l contour $(GEOJSONDIR)/contour*0.geojson
 
 $(MBTILESDIR)/hillshade.mbtiles: $(TIFDIR)/hillshade.tif
 	mkdir -p $(MBTILESDIR)
-	gdal_translate $< $@ -of MBTILES
+	gdal_translate --config GDAL_CACHEMAX $(GDAL_CACHEMAX) $< $@ -of MBTILES
 	gdaladdo -r nearest $@ 2 4 8 16
 
 $(MBTILESDIR)/slope.mbtiles: $(TIFDIR)/slope.tif
 	mkdir -p $(MBTILESDIR)
-	gdal_translate $< $@ -of MBTILES
+	gdal_translate --config GDAL_CACHEMAX $(GDAL_CACHEMAX) $< $@ -of MBTILES
 	gdaladdo -r nearest $@ 2 4 8 16
 
 $(MBTILESDIR)/OSloOVERLAY_LR_Alps_16.mbtiles:
@@ -61,12 +64,7 @@ $(GEOJSONDIR)/contour.geojson: $(TIFDIR)/contour.tif
 	seq $$(( $(MIN_Z) + 40 )) 100 $(MAX_Z) | parallel --jobs $(CONTOUR_JOBS) 'sed -i "s/\"type\": \"Feature\",/\"type\": \"Feature\", \"tippecanoe\" : { \"minzoom\": 13 },/g" $(GEOJSONDIR)/contour{1}.geojson'
 	seq $$(( $(MIN_Z) + 60 )) 100 $(MAX_Z) | parallel --jobs $(CONTOUR_JOBS) 'sed -i "s/\"type\": \"Feature\",/\"type\": \"Feature\", \"tippecanoe\" : { \"minzoom\": 13 },/g" $(GEOJSONDIR)/contour{1}.geojson'
 	seq $$(( $(MIN_Z) + 80 )) 100 $(MAX_Z) | parallel --jobs $(CONTOUR_JOBS) 'sed -i "s/\"type\": \"Feature\",/\"type\": \"Feature\", \"tippecanoe\" : { \"minzoom\": 13 },/g" $(GEOJSONDIR)/contour{1}.geojson'
-	mv $(GEOJSONDIR)/contour$(MIN_Z).geojson $@
-	for x in $$(seq $$(( $(MIN_Z) + 20 )) 20 $(MAX_Z)) ; do \
-		ogr2ogr -f GeoJSON -append $@ $(GEOJSONDIR)/contour$${x}.geojson ; \
-		rm $(GEOJSONDIR)/contour$${x}.geojson ; \
-	done; \
-	echo ok
+	touch $@
 
 $(GEOJSONDIR)/glacier_contour20.geojson: /data/contour2pgsql-contour /sql/glacier_contour20.sql
 	mkdir -p $(GEOJSONDIR)

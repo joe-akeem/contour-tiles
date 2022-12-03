@@ -6,6 +6,7 @@ The relief and is based on data from [SRTM 90m DEM Digital Elevation Database](h
 [OpenSlopeMap](https://www.openslopemap.org/).
 
 ## Getting it
+
 ```bash
 git clone https://github.com/joe-akeem/contour-tiles.git
 ```
@@ -50,6 +51,9 @@ the `CONTOUR_JOBS` variables, in the `docker-compose-compute.yml` file. Beware o
 that your host have. Moreover, each job will consume a lot of RAM, essentially dependent upon the size of the area. For the default area, i use 8 jobs with 16
 GB free RAM.
 
+Last problem, the long long time took by gdal_translate... Adding cache can speed up the process, but don't wait a huge difference. The variable is
+GDAL_CACHEMAX, in MB.
+
 ## Inspecting the tiles
 
 To inspect the mbtiles files a local tileserver can be started as follows:
@@ -75,4 +79,20 @@ The contour lines are tagged with three fields:
 ## Performances
 
 The container has been tried with success on an Azure VM, Standard_D8ds_v5 with
-a P30 SSD (1To, 5kIOPS). The whole process took about 45 minutes.
+a P30 SSD (1To, 5kIOPS). The whole process for Europa took about 30 minutes.
+
+The container has been used with success on an Azure VM, Standard_HB60-45rs with
+a P30 SSD (1To, 5kIOPS). The whole process for *Planet* took about 3 days. Even if
+this machine had a lot of cores, the RAM was the limiting factor. I had to use
+these parameters in the compose file :
+
+```
+MIN_X: 01 
+MAX_X: 72
+MIN_Y: 01
+MAX_Y: 24
+MIN_Z: 0
+MAX_Z: 9000
+CONTOUR_JOBS: 8
+GDAL_CACHEMAX: 160000
+```

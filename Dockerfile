@@ -52,5 +52,5 @@ COPY sql /sql
 
 WORKDIR /contours
 
-ENTRYPOINT ["/bin/bash", "-c", "sleep 10s && export OGR_GEOJSON_MAX_OBJ_SIZE=1024MB && /usr/bin/make"]
+ENTRYPOINT ["/bin/bash", "-c", "sleep 10s && export OGR_GEOJSON_MAX_OBJ_SIZE=100000MB && /usr/bin/make"]
 CMD ["all"]
