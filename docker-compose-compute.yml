@@ -8,8 +8,16 @@ services:
     depends_on:
       - postgres-osm
     environment:
-      DESCRIPTION: "Europe contour lines vector data by singletrail-map.eu"
       ATTRIBUTION: "©singletrail-map.eu ©OpenStreetMap"
+      DESCRIPTION: ${DESCRIPTION}
+      MIN_X: ${MIN_X}
+      MAX_X: ${MAX_X}
+      MIN_Y: ${MIN_Y}
+      MAX_Y: ${MAX_Y}
+      MIN_Z: ${MIN_Z}
+      MAX_Z: ${MAX_Z}
+      CONTOUR_JOBS: ${CONTOUR_JOBS}
+      GDAL_CACHEMAX: ${GDAL_CACHEMAX}
 
   postgres-osm:
     image: kartoza/postgis:15-3.3

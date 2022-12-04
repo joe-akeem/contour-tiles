@@ -30,7 +30,8 @@ RUN apt-get update -y && apt-get install -y \
         zlib1g-dev \
         wget \
         python3-gdal \
-        gdal-bin
+        gdal-bin \
+		parallel
 
 #see https://github.com/joe-akeem/contour-tiles/issues/6
 RUN apt-get remove -y libproj15
@@ -51,5 +52,5 @@ COPY sql /sql
 
 WORKDIR /contours
 
-ENTRYPOINT ["/bin/bash", "-c", "sleep 10s && export OGR_GEOJSON_MAX_OBJ_SIZE=1024MB && /usr/bin/make"]
+ENTRYPOINT ["/bin/bash", "-c", "sleep 10s && export OGR_GEOJSON_MAX_OBJ_SIZE=100000MB && /usr/bin/make"]
 CMD ["all"]
