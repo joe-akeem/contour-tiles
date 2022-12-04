@@ -22,37 +22,51 @@ This will build the mbtiles files in the folder `./osm/mbtiles`
 
 ## Area
 
-By default, the Europe area will be covered by this docker file. If your want to cover another area,
-please use this tool [SRTM Tile Grabber](https://dwtkns.com/srtm/). You'll be able to identify tiles
-that will be needed to build your data :
+By default, the Europe area will be covered (defined in `.env`). The configuration for other areas has been prepared in
+the `.env-*` files. For example, to build the contour tiles for South America, pass the corresponding environment file to
+`docker-compose` as follows:
+
+```bash
+docker-compose --env-file .env-south-america -f docker-compose-compute.yml up
+```
+
+To completely customize the area, please use this tool [SRTM Tile Grabber](https://dwtkns.com/srtm/). You'll be able to
+identify the tiles that will be needed to build your data:
 
 ![SRTM Tile example](./img/srtmtile.png)
 
-On this image, the name of the tile is srtm_38_03.zip. X is 38, Y is 03. For example, to compute
-Africa, you can use :
+On this image, the name of the tile is `srtm_38_03.zip`. X is 38, Y is 03. For example, to compute
+Hawaii only, you can export the custom area as environment variables before running `docker-compose`:
 
-* MIN_X : 33 ;
-* MAX_X : 47 ;
-* MIN_Y : 05 ;
-* MAX_Y : 19 ;
-* MIN_Z : 0 ;
-* MAX_Z : 4400.
+```bash
+export MIN_X=05 MAX_X=06 MIN_Y=08 MAX_Y=09
+```
 
-Please note that MIN_Z and MAX_Z are the limit in terms of altitude.
+Please note that `MIN_Z` and `MAX_Z` are the limit in terms of altitude.
 
-Just modify the docker-compose-compute.yml so that your limits are reflected then launch the computation.
+For a dry run to verify the configuration before launching the whole process run:
+
+```bash
+docker-compose -f docker-compose-compute.yml config
+```
+
+Then start the building of the tiles as before:
+
+```bash
+docker-compose -f docker-compose-compute.yml up
+```
 
 ## Computing large areas
 
-With the view to be able to compute areas, many improvments have been done. First of all, the main bottleneck was the use of `gdal_contour`. It's a single core process...
+With the view to be able to compute areas, many improvements have been done. First of all, the main bottleneck was the use of `gdal_contour`. It's a single core process...
 
 To be able to overcome this problem, this script can now compute contour using parallelized job. You'll be able to define the number of parallel jobs using
 the `CONTOUR_JOBS` variables, in the `docker-compose-compute.yml` file. Beware of the fact that you should limit the number of jobs to the number of core
-that your host have. Moreover, each job will consume a lot of RAM, essentially dependent upon the size of the area. For the default area, i use 8 jobs with 16
+that your host has. Moreover, each job will consume a lot of RAM, essentially dependent upon the size of the area. For the default area, i use 8 jobs with 16
 GB free RAM.
 
-Last problem, the long long time took by gdal_translate... Adding cache can speed up the process, but don't wait a huge difference. The variable is
-GDAL_CACHEMAX, in MB.
+Last problem, the long time taken by `gdal_translate`... Adding cache can speed up the process, but don't expect a huge difference. The variable is
+`GDAL_CACHEMAX`, in MB.
 
 ## Inspecting the tiles
 
