@@ -81,12 +81,8 @@ A basic style is also available and can be used to view the generated data e.g. 
 You will notice that there are contour lines for 100 meter and for 20 meter equidistance. The 100 meter equidistance lines
 will start showing from zoom level 10 while the 20 meter equidistance lines are showing from zoom level 13 upwards.
  
-The contour lines are tagged with three fields:
-* `elev`: the elevation of the contour line in meters above sea level
-* `distance: the equidistance of the contour line (20m or 100m) which helps styling them differently. E.g. you might want
-  to show the 100 meter lines more prominent.
-* `type`: this is currently `normal` for all contour lines. There are plans to encode the terrain in this field
-  (e.g. `normal`, `rock`, `glacier`) so you can style the lines differently depending on the terrain (e.g. blue for glaciers).
+The contour lines are tagged with a field named `elev` representing the elevation of the contour line in meters above sea level.
+
 
 <img src="./img/relief.png" width="700" alt="relief">
 
