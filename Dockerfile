@@ -1,8 +1,7 @@
-FROM osgeo/gdal:ubuntu-full-3.5.3
+FROM osgeo/gdal:ubuntu-full-3.6.3
 MAINTAINER joeakeem "info@singletrail-map.eu"
 
 ENV DEBIAN_FRONTEND=noninteractive
-
 RUN apt-get clean
 
 RUN apt-get update -y && apt-get install -y software-properties-common
@@ -32,9 +31,6 @@ RUN apt-get update -y && apt-get install -y \
         python3-gdal \
         gdal-bin \
 		parallel
-
-#see https://github.com/joe-akeem/contour-tiles/issues/6
-RUN apt-get remove -y libproj15
 
 # build & install tippecanoe
 WORKDIR /tmp
