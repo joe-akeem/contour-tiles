@@ -88,7 +88,7 @@ The contour lines are tagged with three fields:
 * `type`: this is currently `normal` for all contour lines. There are plans to encode the terrain in this field
   (e.g. `normal`, `rock`, `glacier`) so you can style the lines differently depending on the terrain (e.g. blue for glaciers).
 
-![Relief with contour lines](./img/relief.png)
+<img src="./img/relief.png" width="700" alt="relief">
 
 ## Performances
 
