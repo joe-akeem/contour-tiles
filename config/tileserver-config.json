@@ -17,7 +17,7 @@
     }
   },
   "styles": {
-    "basic": {
+    "contour": {
       "style": "/config/tileserver-style.json"
     }
   }

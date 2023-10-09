@@ -1,151 +1,67 @@
 {
   "version": 8,
-  "name": "Basic",
+  "name": "Contour Tiles",
   "metadata": {
     "maputnik:license": "https://github.com/maputnik/osm-liberty/blob/gh-pages/LICENSE.md",
-    "maputnik:renderer": "mbgljs"
+    "maputnik:renderer": "mbgljs",
+    "openmaptiles:version": "3.x"
   },
   "sources": {
     "contour": {
       "type": "vector",
       "url": "mbtiles://contour.mbtiles"
     },
-    "natural_earth_shaded_relief": {
-      "tileSize": 256,
-      "url": "mbtiles://hillshade.mbtiles",
-      "type": "raster"
-    },
-    "natural_earth_shaded_slope": {
-      "tileSize": 256,
-      "url" : "mbtiles://slope.mbtiles",
-      "type": "raster"
+    "hillshade": {
+      "type": "raster",
+      "url": "mbtiles://hillshade.mbtiles"
     }
   },
-  "glyphs": "https://glfonts.lukasmartinelli.ch/fonts/{fontstack}/{range}.pbf",
+  "sprite": "https://maputnik.github.io/osm-liberty/sprites/osm-liberty",
+  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key={key}",
   "layers": [
     {
-      "id": "background",
-      "type": "background",
+      "id": "contour20",
+      "type": "line",
+      "source": "contour",
+      "source-layer": "contour",
+      "filter": ["==", ["%", ["get", "elev"], 20], 0],
+      "layout": {"visibility": "visible"},
+      "paint": {"line-color": "rgba(118, 94, 29, 1)", "line-width": 0.1}
+    },
+    {
+      "id": "contour100",
+      "type": "line",
+      "source": "contour",
+      "source-layer": "contour",
+      "filter": ["==", ["%", ["get", "elev"], 100], 0],
+      "layout": {"visibility": "visible"},
       "paint": {
-        "background-color": "rgba(248, 249, 251, 1)"
+        "line-color": "rgba(118, 94, 29, 1)",
+        "line-width": {"stops": [[10, 0.1], [13, 0.4]]}
       }
     },
     {
-      "id": "contour_normal20",
-      "type": "line",
-      "source": "contour",
-      "source-layer": "contour",
-      "paint": {
-        "line-color": "rgba(118, 94, 29, 1)",
-        "line-width": 0.1
-      },
-      "filter": [
-        "all",
-        [
-          "==",
-          "type",
-          "normal"
-        ],
-        [
-          "==",
-          "distance",
-          "20m"
-        ]
-      ],
-      "minzoom": 13
+      "id": "hillshade",
+      "type": "raster",
+      "source": "hillshade",
+      "layout": {"visibility": "visible"},
+      "paint": {"raster-opacity": 0.2}
     },
     {
-      "id": "contour_normal100",
-      "type": "line",
-      "source": "contour",
-      "source-layer": "contour",
-      "layout": {
-        "visibility": "visible"
-      },
-      "filter": [
-        "all",
-        [
-          "==",
-          "type",
-          "normal"
-        ],
-        [
-          "==",
-          "distance",
-          "100m"
-        ]
-      ],
-      "paint": {
-        "line-color": "rgba(118, 94, 29, 1)",
-        "line-width": {
-          "stops": [
-            [
-              10,
-              0.1
-            ],
-            [
-              13,
-              0.3
-            ]
-          ]
-        }
-      },
-      "minzoom": 10
-    },
-    {
-      "id": "contour_normal_label",
+      "id": "contour_label",
       "type": "symbol",
       "source": "contour",
       "source-layer": "contour",
-      "filter": [
-        "all",
-        [
-          "==",
-          "type",
-          "normal"
-        ],
-        [
-          "==",
-          "distance",
-          "100m"
-        ]
-      ],
+      "filter": ["==", ["%", ["get", "elev"], 100], 0],
       "layout": {
         "text-field": "{elev}",
         "symbol-placement": "line",
         "symbol-spacing": 500,
         "text-size": 10,
         "visibility": "visible",
-        "text-font": [
-          "Open Sans Italic"
-        ]
-      },
-      "paint": {
-        "text-color": "rgba(118, 94, 29, 1)"
-      },
-      "minzoom": 11
-    },
-    {
-      "id": "hillshade",
-      "type": "raster",
-      "source": "natural_earth_shaded_relief",
-      "paint": {
-        "raster-opacity": 0.2
-      }
-    },
-    {
-      "id": "slope",
-      "type": "raster",
-      "source": "natural_earth_shaded_slope",
-      "paint": {
-        "raster-opacity": 0.3
+        "text-font": ["Open Sans Italic"]
       }
     }
   ],
-  "id": "basic",
-  "center": [
-    9.2822,
-    47.0931
-  ],
-  "zoom": 10
+  "id": "osm-liberty"
 }
