@@ -60,6 +60,9 @@
         "text-size": 10,
         "visibility": "visible",
         "text-font": ["Open Sans Italic"]
+      },
+      "paint": {
+        "text-color": "rgba(118, 94, 29, 1)"
       }
     }
   ],
