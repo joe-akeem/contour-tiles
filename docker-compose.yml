@@ -1,10 +1,11 @@
 version: '3'
 services:
   contour-tileserver:
-    image: klokantech/tileserver-gl:v2.6.0
+    image: maptiler/tileserver-gl:v4.5.1
     ports:
-      - 8080:80
+      - "8080:8080"
     volumes:
-      - ./osm:/data
+      - ./osm/mbtiles:/data
       - ./config:/config
-    command: "-c /config/tileserver-config.json"
+      - ./styles:/styles
+    command: "-c /config/tileserver.json"

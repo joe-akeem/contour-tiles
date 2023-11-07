@@ -1,0 +1,27 @@
+{
+  "options": {
+    "paths": {
+      "root": "",
+      "mbtiles": "/data"
+    },
+    "formatQuality": {
+      "jpeg": 80,
+      "webp": 90
+    },
+    "maxScaleFactor": 3,
+    "maxSize": 2048,
+    "pbfAlias": "pbf",
+    "serveAllFonts": false,
+    "serveAllStyles": false,
+    "serveStaticMaps": true,
+    "tileMargin": 0
+  },
+  "styles": {
+    "contour": {
+      "style": "/styles/contours.json",
+      "tilejson": {
+        "type": "overlay"
+      }
+    }
+  }
+}

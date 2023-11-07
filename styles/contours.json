@@ -1,11 +1,6 @@
 {
   "version": 8,
   "name": "Contour Tiles",
-  "metadata": {
-    "maputnik:license": "https://github.com/maputnik/osm-liberty/blob/gh-pages/LICENSE.md",
-    "maputnik:renderer": "mbgljs",
-    "openmaptiles:version": "3.x"
-  },
   "sources": {
     "contour": {
       "type": "vector",
@@ -14,6 +9,17 @@
     "hillshade": {
       "type": "raster",
       "url": "mbtiles://hillshade.mbtiles"
+    }
+  },
+  "center": [7.65849, 45.97728],
+  "zoom": 14,
+  "options": {
+    "paths": {
+      "mbtiles": "/data"
+    },
+    "formatQuality": {
+      "jpeg": 80,
+      "webp": 90
     }
   },
   "sprite": "https://maputnik.github.io/osm-liberty/sprites/osm-liberty",
