@@ -9,6 +9,10 @@
     "hillshade": {
       "type": "raster",
       "url": "mbtiles://hillshade.mbtiles"
+    },
+    "steepness": {
+      "type": "raster",
+      "url": "mbtiles://OSloOVERLAY_LR_Alps_16.mbtiles"
     }
   },
   "center": [7.65849, 45.97728],
