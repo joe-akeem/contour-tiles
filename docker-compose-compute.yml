@@ -8,7 +8,7 @@ services:
     depends_on:
       - postgres-osm
     environment:
-      ATTRIBUTION: "©singletrail-map.eu ©OpenStreetMap"
+      ATTRIBUTION: "©singletrail-map.ch ©OpenStreetMap"
       DESCRIPTION: ${DESCRIPTION}
       MIN_X: ${MIN_X}
       MAX_X: ${MAX_X}

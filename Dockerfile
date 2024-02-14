@@ -1,5 +1,5 @@
 FROM osgeo/gdal:ubuntu-full-3.6.3
-MAINTAINER joeakeem "info@singletrail-map.eu"
+MAINTAINER joeakeem "info@singletrail-map.ch"
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get clean
